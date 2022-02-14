@@ -15,4 +15,7 @@ public class AccountService {
     public List<Account> getAccounts(){
         return accountRepository.findAll();
     }
+    public List<Account> getAccountLogined(String email,String password){
+        return accountRepository.layAccountLogin(email,password);
+    }
 }

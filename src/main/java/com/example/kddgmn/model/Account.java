@@ -1,6 +1,8 @@
 package com.example.kddgmn.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,8 @@ public class Account {
     @Column(name = "idaccount")
     private Integer idAccount;
     private String email;
+
+    @JsonIgnore
     private String password;
 
     @ManyToOne
