@@ -3,9 +3,7 @@ package com.example.kddgmn.controller;
 import com.example.kddgmn.model.Discount;
 import com.example.kddgmn.service.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,5 +16,10 @@ public class DiscountController {
     @GetMapping("/alldiscount")
     public List<Discount> getAll(){
         return discountService.getAll();
+    }
+
+    @PostMapping("/adddiscount")
+    public  String save(@RequestBody  Discount discount){
+        return  discountService.save(discount);
     }
 }

@@ -10,10 +10,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idproduct")
     private Integer idProduct;
-    private String name;
+    @Column(name = "nameproduct")
+    private String nameProduct;
     private Float price;
     private String color;
-    private String desc;
+    @Column(name = "descproduct")
+    private String descProduct;
     private Integer quantity;
     @Column(name = "adddate")
     private Date addDate;
@@ -27,12 +29,23 @@ public class Product {
     public Product() {
     }
 
-    public Product(Integer idProduct, String name, Float price, String color, String desc, Integer quantity, Date addDate, Integer isActive, Discount discount) {
+    public Product(Integer idProduct, String nameProduct, Float price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount) {
         this.idProduct = idProduct;
-        this.name = name;
+        this.nameProduct = nameProduct;
         this.price = price;
         this.color = color;
-        this.desc = desc;
+        this.descProduct = descProduct;
+        this.quantity = quantity;
+        this.addDate = addDate;
+        this.isActive = isActive;
+        this.discount = discount;
+    }
+
+    public Product(String nameProduct, Float price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount) {
+        this.nameProduct = nameProduct;
+        this.price = price;
+        this.color = color;
+        this.descProduct = descProduct;
         this.quantity = quantity;
         this.addDate = addDate;
         this.isActive = isActive;
@@ -47,12 +60,12 @@ public class Product {
         this.idProduct = idProduct;
     }
 
-    public String getName() {
-        return name;
+    public String getNameProduct() {
+        return nameProduct;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
     }
 
     public Float getPrice() {
@@ -71,12 +84,12 @@ public class Product {
         this.color = color;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescProduct() {
+        return descProduct;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescProduct(String descProduct) {
+        this.descProduct = descProduct;
     }
 
     public Integer getQuantity() {
@@ -115,10 +128,10 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "idProduct=" + idProduct +
-                ", name='" + name + '\'' +
+                ", nameProduct='" + nameProduct + '\'' +
                 ", price=" + price +
                 ", color='" + color + '\'' +
-                ", desc='" + desc + '\'' +
+                ", desc='" + descProduct + '\'' +
                 ", quantity=" + quantity +
                 ", addDate=" + addDate +
                 ", isActive=" + isActive +

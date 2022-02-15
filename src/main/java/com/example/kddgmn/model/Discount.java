@@ -1,5 +1,7 @@
 package com.example.kddgmn.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -10,23 +12,41 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iddiscount")
     private Integer idDiscount;
-    private String name;
-    private String desc;
+    @Column(name = "namediscount")
+    private String nameDiscount;
+    @Column(name = "descdiscount")
+    private String descDiscount;
     private Double percent;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "datecreate")
     private Date dateCreate;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "datemodified")
     private Date dateModified;
+
     @Column(name = "isactive")
     private Integer isActive;
 
     public Discount() {
     }
 
-    public Discount(Integer idDiscount, String name, String desc, Double percent, Date dateCreate, Date dateModified, Integer isActive) {
+    public Discount(Integer idDiscount, String nameDiscount, String descDiscount, Double percent, Date dateCreate, Date dateModified, Integer isActive) {
         this.idDiscount = idDiscount;
-        this.name = name;
-        this.desc = desc;
+        this.nameDiscount = nameDiscount;
+        this.descDiscount = descDiscount;
+        this.percent = percent;
+        this.dateCreate = dateCreate;
+        this.dateModified = dateModified;
+        this.isActive = isActive;
+    }
+
+    public Discount(String nameDiscount, String descDiscount, Double percent, Date dateCreate, Date dateModified, Integer isActive) {
+        this.nameDiscount = nameDiscount;
+        this.descDiscount = descDiscount;
         this.percent = percent;
         this.dateCreate = dateCreate;
         this.dateModified = dateModified;
@@ -41,20 +61,20 @@ public class Discount {
         this.idDiscount = idDiscount;
     }
 
-    public String getName() {
-        return name;
+    public String getNameDiscount() {
+        return nameDiscount;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameDiscount(String nameDiscount) {
+        this.nameDiscount = nameDiscount;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescDiscount() {
+        return descDiscount;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescDiscount(String descDiscount) {
+        this.descDiscount = descDiscount;
     }
 
     public Double getPercent() {
@@ -93,8 +113,8 @@ public class Discount {
     public String toString() {
         return "Discount{" +
                 "idDiscount=" + idDiscount +
-                ", name='" + name + '\'' +
-                ", desc='" + desc + '\'' +
+                ", nameDiscount='" + nameDiscount + '\'' +
+                ", descDiscount='" + descDiscount + '\'' +
                 ", percent=" + percent +
                 ", dateCreate=" + dateCreate +
                 ", dateModified=" + dateModified +
