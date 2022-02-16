@@ -21,4 +21,8 @@ public class ProductController {
     public Integer addProduct(@RequestBody Product product){
         return productsService.save(product); // return 1 la thanh cong
     }
+    @PostMapping("/deleteproduct")
+    public Integer deleteProduct(@RequestParam("idProd") Integer idProd){
+        return productsService.remove(idProd);// return 1 la thanh cong
+    }
 }

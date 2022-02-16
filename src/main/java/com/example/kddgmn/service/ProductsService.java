@@ -25,4 +25,12 @@ public class ProductsService {
         }
         return 1;
     }
+    public Integer remove(Integer id){
+        try {
+            productRepository.deleteById(id);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
 }
