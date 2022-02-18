@@ -17,6 +17,9 @@ public class ProductsService {
     public List<Product> getAll(){
         return productRepository.findAll();
     }
+    public Product getProduct(Integer id){
+       return productRepository.getById(id);
+    }
     public Integer save(Product product){
         try {
             productRepository.save(product);
@@ -33,4 +36,7 @@ public class ProductsService {
         }
         return 1;
     }
+    public Integer getIdMax(){
+        return productRepository.findIdMax();
+   }
 }

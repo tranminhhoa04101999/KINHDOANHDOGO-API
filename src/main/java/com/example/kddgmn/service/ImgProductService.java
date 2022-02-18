@@ -3,6 +3,7 @@ package com.example.kddgmn.service;
 import com.example.kddgmn.model.ImgProduct;
 import com.example.kddgmn.payload.ImgProductResponse;
 import com.example.kddgmn.repository.ImgProductRepository;
+import com.example.kddgmn.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ import java.util.List;
 public class ImgProductService {
     @Autowired
     private ImgProductRepository imgProductRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<ImgProduct> getAll(){
         return imgProductRepository.findAll();
@@ -31,4 +35,16 @@ public class ImgProductService {
 
         return dataRes;
     }
+    public Integer Save(String imgURL,Integer idProduct) {
+        try {
+            var item = new ImgProduct();
+            var product = productRepository.getById(idProduct);
+            item.setImgURL(imgURL);
+            item.setProduct(product);
+            imgProductRepository.save(item);
+        }catch (Exception ex){
+            return 0;
+        }
+        return  1;
+    };
 }

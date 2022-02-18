@@ -4,10 +4,7 @@ import com.example.kddgmn.model.ImgProduct;
 import com.example.kddgmn.payload.ImgProductResponse;
 import com.example.kddgmn.service.ImgProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +22,9 @@ public class ImgProductController {
     @GetMapping("/imgproductwith")
     public List<ImgProductResponse> getImgWithIdProd (@RequestParam("idProduct") Integer id){
         return imgProductService.getImgWithIdProd(id);
+    }
+    @PostMapping("/saveimageproduct")
+    public Integer save(@RequestParam("imgURL") String imgURL,@RequestParam("idProduct") Integer idProduct){
+        return imgProductService.Save(imgURL,idProduct); // return 1 la thanh cong
     }
 }

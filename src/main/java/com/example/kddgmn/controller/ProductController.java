@@ -25,4 +25,8 @@ public class ProductController {
     public Integer deleteProduct(@RequestParam("idProd") Integer idProd){
         return productsService.remove(idProd);// return 1 la thanh cong
     }
+    @GetMapping("/getIdProductMax")
+    public Integer getIdProductMax(){
+        return productsService.getIdMax();
+    }
 }
