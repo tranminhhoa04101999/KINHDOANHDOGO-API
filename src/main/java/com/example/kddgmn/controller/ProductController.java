@@ -29,4 +29,8 @@ public class ProductController {
     public Integer getIdProductMax(){
         return productsService.getIdMax();
     }
+    @GetMapping("/getproductbyid")
+    public Product getProductById(@RequestParam("idProduct") Integer idProduct){
+        return productsService.getProductwithid(idProduct);
+    }
 }

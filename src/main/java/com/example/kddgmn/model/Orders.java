@@ -13,7 +13,7 @@ public class Orders {
     private String phone;
     private String address;
     private String note;
-    private Float total;
+    private Double total;
     @Column(name = "datecreate")
     private Date dateCreate;
     @Column(name = "datemodified")
@@ -36,7 +36,7 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(Integer idOrders, String phone, String address, String note, Float total, Date dateCreate, Date dateModified, Date dateEnd, Status status, Customer customer, Employee employee) {
+    public Orders(Integer idOrders, String phone, String address, String note, Double total, Date dateCreate, Date dateModified, Date dateEnd, Status status, Customer customer, Employee employee) {
         this.idOrders = idOrders;
         this.phone = phone;
         this.address = address;
@@ -82,11 +82,11 @@ public class Orders {
         this.note = note;
     }
 
-    public Float getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(Float total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 

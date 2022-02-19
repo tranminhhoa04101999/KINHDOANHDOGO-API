@@ -12,7 +12,7 @@ public class Product {
     private Integer idProduct;
     @Column(name = "nameproduct")
     private String nameProduct;
-    private Float price;
+    private Double price;
     private String color;
     @Column(name = "descproduct")
     private String descProduct;
@@ -29,7 +29,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Integer idProduct, String nameProduct, Float price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount) {
+    public Product(Integer idProduct, String nameProduct, Double price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount) {
         this.idProduct = idProduct;
         this.nameProduct = nameProduct;
         this.price = price;
@@ -41,7 +41,7 @@ public class Product {
         this.discount = discount;
     }
 
-    public Product(String nameProduct, Float price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount) {
+    public Product(String nameProduct, Double price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount) {
         this.nameProduct = nameProduct;
         this.price = price;
         this.color = color;
@@ -68,11 +68,11 @@ public class Product {
         this.nameProduct = nameProduct;
     }
 
-    public Float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

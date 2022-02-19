@@ -17,11 +17,13 @@ public class ProductsService {
     public List<Product> getAll(){
         return productRepository.findAll();
     }
-    public Product getProduct(Integer id){
-       return productRepository.getById(id);
+    public Product getProductwithid(Integer id){
+       return productRepository.findById(id).get();
     }
     public Integer save(Product product){
         try {
+            System.out.println(product.getPrice());
+
             productRepository.save(product);
         }catch (Exception ex){
             return 0;

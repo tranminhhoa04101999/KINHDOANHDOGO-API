@@ -35,6 +35,7 @@ public class ImgProductService {
 
         return dataRes;
     }
+
     public Integer Save(String imgURL,Integer idProduct) {
         try {
             var item = new ImgProduct();
@@ -47,4 +48,22 @@ public class ImgProductService {
         }
         return  1;
     };
+    public Integer deleteById(Integer idImg){
+        try {
+            imgProductRepository.deleteById(idImg);
+        }catch (Exception ex){
+            return 0;
+        }
+        return  1;
+    }
+    public Integer deleteByIdProduct(Integer idProduct){
+        try {
+            imgProductRepository.deleteByIdProduct(idProduct);
+        }catch (Exception ex){
+            System.out.println(ex);
+
+            return 0;
+        }
+        return  1;
+    }
 }

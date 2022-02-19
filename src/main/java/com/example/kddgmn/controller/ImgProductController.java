@@ -27,4 +27,13 @@ public class ImgProductController {
     public Integer save(@RequestParam("imgURL") String imgURL,@RequestParam("idProduct") Integer idProduct){
         return imgProductService.Save(imgURL,idProduct); // return 1 la thanh cong
     }
+    @PostMapping("/deleteImgById")
+    public Integer delete(@RequestParam("idImgProduct") Integer idImgProduct){
+        return imgProductService.deleteById(idImgProduct);
+    }
+    @PostMapping("/deleteImgByIdProduct")
+    public Integer deleteImgByIdProduct(@RequestParam("idProduct") Integer idProduct){
+        return imgProductService.deleteByIdProduct(idProduct);
+    }
+
 }
