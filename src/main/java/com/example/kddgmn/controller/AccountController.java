@@ -18,13 +18,21 @@ public class AccountController {
     }
 
     @GetMapping("/accounts")
-    public List<Account> getAccounts(){
-        return accountService.getAccounts();
+    public List<Account> getAll(){
+        return accountService.getAll();
     }
 
     @GetMapping("/loginadmin")
     @ResponseBody
     public List<Account> getAccountLogin(@RequestParam("email") String email, @RequestParam("password") String password){
         return accountService.getAccountLogined(email,password);
+    }
+    @PostMapping("/addAccount")
+    public Integer save(@RequestBody Account account){
+        return  accountService.save(account);
+    }
+    @PostMapping("/deleteById")
+    public Integer deleteById(@RequestParam("id") Integer id){
+        return accountService.deleteById(id);
     }
 }

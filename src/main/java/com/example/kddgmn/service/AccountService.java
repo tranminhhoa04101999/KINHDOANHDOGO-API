@@ -12,10 +12,27 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public List<Account> getAccounts(){
+    public List<Account> getAll(){
         return accountRepository.findAll();
+    }
+    public Integer save(Account account){
+        try{
+            accountRepository.save(account);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
     }
     public List<Account> getAccountLogined(String email,String password){
         return accountRepository.layAccountLogin(email,password);
+    }
+    public Integer deleteById(Integer id){
+        try{
+            accountRepository.deleteById(id);
+
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
     }
 }

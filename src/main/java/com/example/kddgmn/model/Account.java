@@ -15,7 +15,6 @@ public class Account {
     private Integer idAccount;
     private String email;
 
-    @JsonIgnore
     private String password;
 
     @ManyToOne
