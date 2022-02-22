@@ -1,12 +1,18 @@
 package com.example.kddgmn.service;
 
 import com.example.kddgmn.model.Product;
+import com.example.kddgmn.payload.PagedResponse;
 import com.example.kddgmn.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -41,4 +47,19 @@ public class ProductsService {
     public Integer getIdMax(){
         return productRepository.findIdMax();
    }
+
+    public PagedResponse<Product> getAllProductPage(Integer page, Integer size){
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC,"price");
+        Page<Product> products = productRepository.findAllWithPage(pageable);
+
+        if (products.getNumberOfElements() == 0) {
+            return new PagedResponse<>(Collections.emptyList(), products.getNumber(), products.getSize(),
+                    products.getTotalElements(), products.getTotalPages(), products.isLast());
+        }
+        List<Product> productRes = products.getContent();
+
+
+        return new PagedResponse<>(productRes, products.getNumber(), products.getSize(), products.getTotalElements(),
+                products.getTotalPages(), products.isLast());
+    }
 }

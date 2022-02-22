@@ -1,6 +1,7 @@
 package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.Product;
+import com.example.kddgmn.payload.PagedResponse;
 import com.example.kddgmn.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +33,9 @@ public class ProductController {
     @GetMapping("/getproductbyid")
     public Product getProductById(@RequestParam("idProduct") Integer idProduct){
         return productsService.getProductwithid(idProduct);
+    }
+    @GetMapping("/allProductPage")
+    public PagedResponse<Product> getAllPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
+        return productsService.getAllProductPage(page,size);
     }
 }

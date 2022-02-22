@@ -35,4 +35,8 @@ public class AccountController {
     public Integer deleteById(@RequestParam("id") Integer id){
         return accountService.deleteById(id);
     }
+    @GetMapping("/getAccountById")
+    public Account getAccountById(@RequestParam("id") Integer id){
+        return accountService.getAccountById(id);
+    }
 }

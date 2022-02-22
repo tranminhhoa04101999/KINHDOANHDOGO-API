@@ -35,4 +35,7 @@ public class AccountService {
         }
         return 1;
     }
+    public Account getAccountById(Integer id){
+        return accountRepository.findById(id).get();
+    }
 }

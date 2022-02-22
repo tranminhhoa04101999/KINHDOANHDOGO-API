@@ -2,6 +2,7 @@ package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.ImgProduct;
 import com.example.kddgmn.payload.ImgProductResponse;
+import com.example.kddgmn.payload.ImgWithIdProdResponse;
 import com.example.kddgmn.service.ImgProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,15 @@ public class ImgProductController {
 
     @GetMapping("/imgproductwith")
     public List<ImgProductResponse> getImgWithIdProd (@RequestParam("idProduct") Integer id){
+        return imgProductService.getImgByIdProd(id);
+    }
+    @GetMapping("/imgwithidprod")
+    public List<ImgWithIdProdResponse> getImgHaveIdProd(@RequestParam("idProduct")Integer id){
         return imgProductService.getImgWithIdProd(id);
+    }
+    @GetMapping("/allimghaveidprod")
+    public List<ImgWithIdProdResponse> getAllImgHaveIdProd(){
+        return imgProductService.getAllHaveIdProd();
     }
     @PostMapping("/saveimageproduct")
     public Integer save(@RequestParam("imgURL") String imgURL,@RequestParam("idProduct") Integer idProduct){
