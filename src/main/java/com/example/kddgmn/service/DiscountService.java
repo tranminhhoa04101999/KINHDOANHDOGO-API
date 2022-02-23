@@ -15,12 +15,20 @@ public class DiscountService {
     public List<Discount> getAll(){
         return discountRepository.findAll();
     }
-    public String save(Discount discount){
+    public Integer save(Discount discount){
         try {
             discountRepository.save(discount);
         }catch (Exception ex){
-            return ex.toString();
+            return 0;
         }
-        return "thanhcong";
+        return 1;
+    }
+    public Integer deleteById(Integer id){
+        try {
+            discountRepository.deleteById(id);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
     }
 }

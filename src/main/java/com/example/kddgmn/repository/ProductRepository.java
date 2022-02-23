@@ -16,4 +16,6 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     Page<Product> findAllWithPage (Pageable pageable);
     @Query("SELECT v FROM Product v WHERE v.category.idCategory= :idCategory")
     List<Product> findByIdcategory(@Param("idCategory") Integer idCategory);
+    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount= :idDiscount")
+    List<Product> findByIdDiscount(@Param("idDiscount") Integer idDiscount);
 }

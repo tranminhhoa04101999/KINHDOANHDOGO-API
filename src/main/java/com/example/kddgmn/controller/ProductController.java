@@ -46,4 +46,16 @@ public class ProductController {
     public Integer allQuantityByIdCategory(@RequestParam("idCategory") Integer idCategory){
         return productsService.allQuantityByIdCategory(idCategory);
     }
+    @GetMapping("/allquantitybyIdDiscount")
+    public Integer allQuantityByIdDiscount(@RequestParam("idDiscount") Integer idDiscount){
+        return productsService.allQuantityByIdDiscount(idDiscount);
+    }
+    @PostMapping("/updateIdDiscountWhenRemoveDiscount")
+    public Integer updateIdDiscountWhenRemoveDiscount(@RequestParam("idDiscount") Integer idDiscount){
+        return productsService.updateIdDiscountWhenRemoveDiscount(idDiscount);
+    }
+    @PostMapping("/updateIdCategoryWhenRemoveCategory")
+    public Integer updateIdCategoryWhenRemoveCategory(@RequestParam("idCategory") Integer idCategory){
+        return productsService.updateIdCategoryWhenRemoveCategory(idCategory);
+    }
 }

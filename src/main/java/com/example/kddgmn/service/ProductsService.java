@@ -71,5 +71,36 @@ public class ProductsService {
 
         return countLength;
     }
+    public Integer allQuantityByIdDiscount(Integer idDiscount){
+        List<Product> products = productRepository.findByIdDiscount(idDiscount);
+        var countLength = products.size();
 
+        return countLength;
+    }
+    public Integer updateIdDiscountWhenRemoveDiscount(Integer idDiscount){
+        try{
+            List<Product> products = productRepository.findByIdDiscount(idDiscount);
+            for (int i = 0; i < products.size(); i++) {
+                products.get(i).setDiscount(null);
+                save(products.get(i));
+            }
+
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
+    public Integer updateIdCategoryWhenRemoveCategory(Integer idCategory){
+        try{
+            List<Product> products = productRepository.findByIdcategory(idCategory);
+            for (int i = 0; i < products.size(); i++) {
+                products.get(i).setCategory(null);
+                save(products.get(i));
+            }
+
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
 }

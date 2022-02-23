@@ -23,4 +23,12 @@ public class CategoryService {
         }
         return 1;
     }
+    public Integer deleteById(Integer id){
+        try{
+            categoryRepository.deleteById(id);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
 }

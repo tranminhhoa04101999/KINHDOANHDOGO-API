@@ -19,7 +19,11 @@ public class DiscountController {
     }
 
     @PostMapping("/adddiscount")
-    public  String save(@RequestBody  Discount discount){
+    public  Integer save(@RequestBody  Discount discount){
         return  discountService.save(discount);
+    }
+    @PostMapping("/deleleByidDiscount")
+    public Integer deleteById(@RequestParam("idDiscount") Integer id){
+        return  discountService.deleteById(id);
     }
 }

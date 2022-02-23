@@ -22,4 +22,9 @@ public class CategoryController {
     public Integer save(@RequestBody Category category){
         return categoryService.save(category);
     }
+    @PostMapping("/deletecategoryBy")
+    public Integer deleteById(@RequestParam("idCategory") Integer id){
+        return  categoryService.deleteById(id);
+    }
+
 }
