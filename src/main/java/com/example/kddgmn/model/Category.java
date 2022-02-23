@@ -11,23 +11,31 @@ public class Category {
     @Column(name = "idcategory")
     private Integer idCategory;
     private String name;
-    private String desc;
+    @Column(name = "desccategory")
+    private String descCategory;
+    @Column(name = "imgurl")
+    private String imgURL;
     @Column(name = "isactive")
     private Integer isActive;
 
-    @ManyToOne
-    @JoinColumn(name = "idproduct")
-    private Product product;
+
 
     public Category() {
     }
 
-    public Category(Integer idCategory, String name, String desc, Integer isActive, Product product) {
+    public Category(Integer idCategory, String name, String descCategory, String imgURL, Integer isActive) {
         this.idCategory = idCategory;
         this.name = name;
-        this.desc = desc;
+        this.descCategory = descCategory;
+        this.imgURL = imgURL;
         this.isActive = isActive;
-        this.product = product;
+    }
+
+    public Category(String name, String descCategory, String imgURL, Integer isActive) {
+        this.name = name;
+        this.descCategory = descCategory;
+        this.imgURL = imgURL;
+        this.isActive = isActive;
     }
 
     public Integer getIdCategory() {
@@ -46,12 +54,20 @@ public class Category {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescCategory() {
+        return descCategory;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescCategory(String descCategory) {
+        this.descCategory = descCategory;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
     }
 
     public Integer getIsActive() {
@@ -62,22 +78,14 @@ public class Category {
         this.isActive = isActive;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     @Override
     public String toString() {
         return "Category{" +
                 "idCategory=" + idCategory +
                 ", name='" + name + '\'' +
-                ", desc='" + desc + '\'' +
+                ", descCategory='" + descCategory + '\'' +
+                ", imgURL='" + imgURL + '\'' +
                 ", isActive=" + isActive +
-                ", product=" + product +
                 '}';
     }
 }

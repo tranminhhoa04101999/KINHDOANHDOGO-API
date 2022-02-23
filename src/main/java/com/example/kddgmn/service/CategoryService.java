@@ -15,4 +15,12 @@ public class CategoryService {
     public List<Category> getAll(){
          return categoryRepository.findAll();
     }
+    public Integer save(Category category){
+        try{
+            categoryRepository.save(category);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
 }

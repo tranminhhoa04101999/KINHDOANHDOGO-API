@@ -26,10 +26,13 @@ public class Product {
     @JoinColumn(name = "iddiscount")
     private Discount discount;
 
+    @ManyToOne
+    @JoinColumn(name="idcategory")
+    private Category category;
     public Product() {
     }
 
-    public Product(Integer idProduct, String nameProduct, Double price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount) {
+    public Product(Integer idProduct, String nameProduct, Double price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount, Category category) {
         this.idProduct = idProduct;
         this.nameProduct = nameProduct;
         this.price = price;
@@ -39,9 +42,10 @@ public class Product {
         this.addDate = addDate;
         this.isActive = isActive;
         this.discount = discount;
+        this.category = category;
     }
 
-    public Product(String nameProduct, Double price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount) {
+    public Product(String nameProduct, Double price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount, Category category) {
         this.nameProduct = nameProduct;
         this.price = price;
         this.color = color;
@@ -50,6 +54,7 @@ public class Product {
         this.addDate = addDate;
         this.isActive = isActive;
         this.discount = discount;
+        this.category = category;
     }
 
     public Integer getIdProduct() {
@@ -124,6 +129,14 @@ public class Product {
         this.discount = discount;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -131,11 +144,12 @@ public class Product {
                 ", nameProduct='" + nameProduct + '\'' +
                 ", price=" + price +
                 ", color='" + color + '\'' +
-                ", desc='" + descProduct + '\'' +
+                ", descProduct='" + descProduct + '\'' +
                 ", quantity=" + quantity +
                 ", addDate=" + addDate +
                 ", isActive=" + isActive +
                 ", discount=" + discount +
+                ", category=" + category +
                 '}';
     }
 }

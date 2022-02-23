@@ -62,4 +62,14 @@ public class ProductsService {
         return new PagedResponse<>(productRes, products.getNumber(), products.getSize(), products.getTotalElements(),
                 products.getTotalPages(), products.isLast());
     }
+    public List<Product> findByIdCategory(Integer idCategory){
+        return productRepository.findByIdcategory(idCategory);
+    }
+    public Integer allQuantityByIdCategory(Integer idCategory){
+        List<Product> products = productRepository.findByIdcategory(idCategory);
+        var countLength = products.size();
+
+        return countLength;
+    }
+
 }

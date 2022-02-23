@@ -38,4 +38,12 @@ public class ProductController {
     public PagedResponse<Product> getAllPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
         return productsService.getAllProductPage(page,size);
     }
+    @GetMapping("/allproductby")
+    public List<Product> findByIdCategory(@RequestParam("idCategory") Integer idCategory){
+        return productsService.findByIdCategory(idCategory);
+    }
+    @GetMapping("/allquantityby")
+    public Integer allQuantityByIdCategory(@RequestParam("idCategory") Integer idCategory){
+        return productsService.allQuantityByIdCategory(idCategory);
+    }
 }
