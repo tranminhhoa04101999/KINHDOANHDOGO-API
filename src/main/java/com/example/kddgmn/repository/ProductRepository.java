@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product,Integer> {
@@ -20,4 +21,10 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findByIdcategory(@Param("idCategory") Integer idCategory);
     @Query("SELECT v FROM Product v WHERE v.discount.idDiscount= :idDiscount")
     List<Product> findByIdDiscount(@Param("idDiscount") Integer idDiscount);
+    @Query("SELECT v FROM Product v WHERE v.addDate> :date")
+    List<Product> findByNewOneWeek(@Param("date") Date date);
+    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0")
+    List<Product> findByHaveDiscount();
+    @Query("SELECT v FROM Product v WHERE v.nameProduct LIKE %:nameProduct%")
+    Page<Product> findByNamePage(@Param("nameProduct") String nameProduct,Pageable pageable);
 }

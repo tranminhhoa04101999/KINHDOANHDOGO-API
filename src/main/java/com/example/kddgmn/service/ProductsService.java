@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -117,5 +120,25 @@ public class ProductsService {
             return 0;
         }
         return 1;
+    }
+    public List<Product> findByNewOneWeek(){
+        LocalDate dateNowSub = LocalDate.now().minusDays(7); // ngày hiện tại trừ 7 ngày
+        Date dateAdd = Date.from(dateNowSub.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return productRepository.findByNewOneWeek(dateAdd);
+    }
+    public List<Product> findByHaveDiscount(){return productRepository.findByHaveDiscount();}
+    public PagedResponse<Product> findByNamePage(Integer page, Integer size, String name){
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC,"price");
+        Page<Product> products = productRepository.findByNamePage(name,pageable);
+
+        if (products.getNumberOfElements() == 0) {
+            return new PagedResponse<>(Collections.emptyList(), products.getNumber(), products.getSize(),
+                    products.getTotalElements(), products.getTotalPages(), products.isLast());
+        }
+        List<Product> productRes = products.getContent();
+
+
+        return new PagedResponse<>(productRes, products.getNumber(), products.getSize(), products.getTotalElements(),
+                products.getTotalPages(), products.isLast());
     }
 }

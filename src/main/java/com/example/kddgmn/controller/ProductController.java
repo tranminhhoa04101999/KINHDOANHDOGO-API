@@ -62,4 +62,16 @@ public class ProductController {
     public Integer updateIdCategoryWhenRemoveCategory(@RequestParam("idCategory") Integer idCategory){
         return productsService.updateIdCategoryWhenRemoveCategory(idCategory);
     }
+    @GetMapping("/findByNewOneWeek")
+    public List<Product> findByNewOneWeek(){
+        return productsService.findByNewOneWeek();
+    }
+    @GetMapping("/findByHaveDiscount")
+    public List<Product> findByHaveDiscount(){
+        return productsService.findByHaveDiscount();
+    }
+    @GetMapping("/findByNamePage")
+    public PagedResponse<Product> findByNamePage(@RequestParam("page") Integer page, @RequestParam("size") Integer size,@RequestParam("nameProduct") String name){
+        return productsService.findByNamePage(page,size,name);
+    }
 }
