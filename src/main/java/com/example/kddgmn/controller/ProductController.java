@@ -70,8 +70,16 @@ public class ProductController {
     public List<Product> findByHaveDiscount(){
         return productsService.findByHaveDiscount();
     }
+    @GetMapping("/findByHaveDiscountPage")
+    public PagedResponse<Product> findByHaveDiscount(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
+        return productsService.findByHaveDiscountPage(page,size);
+    }
     @GetMapping("/findByNamePage")
     public PagedResponse<Product> findByNamePage(@RequestParam("page") Integer page, @RequestParam("size") Integer size,@RequestParam("nameProduct") String name){
         return productsService.findByNamePage(page,size,name);
+    }
+    @GetMapping("/findByNewOneWeekPage")
+    public PagedResponse<Product> findByNewOneWeekPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
+        return productsService.findByNewOneWeekPage(page,size);
     }
 }

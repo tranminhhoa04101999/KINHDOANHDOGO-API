@@ -16,6 +16,10 @@ public class Role {
     public Role() {
     }
 
+    public Role(Integer idRole) {
+        this.idRole = idRole;
+    }
+
     public Role(Integer idRole, String roleName) {
         this.idRole = idRole;
         this.roleName = roleName;

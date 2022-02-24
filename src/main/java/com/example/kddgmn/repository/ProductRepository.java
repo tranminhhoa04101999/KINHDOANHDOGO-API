@@ -15,16 +15,28 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     Integer findIdMax();
     @Query("SELECT v FROM Product v")
     Page<Product> findAllWithPage (Pageable pageable);
+
     @Query("SELECT v FROM Product v WHERE v.category.idCategory= :idCategory")
     Page<Product> findWithIdCategoryPage (@Param("idCategory") Integer idCategory,Pageable pageable);
+
     @Query("SELECT v FROM Product v WHERE v.category.idCategory= :idCategory")
     List<Product> findByIdcategory(@Param("idCategory") Integer idCategory);
+
     @Query("SELECT v FROM Product v WHERE v.discount.idDiscount= :idDiscount")
     List<Product> findByIdDiscount(@Param("idDiscount") Integer idDiscount);
+
     @Query("SELECT v FROM Product v WHERE v.addDate> :date")
     List<Product> findByNewOneWeek(@Param("date") Date date);
+
+    @Query("SELECT v FROM Product v WHERE v.addDate> :date")
+    Page<Product> findByNewOneWeekPage(@Param("date") Date date,Pageable pageable);
+
     @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0")
     List<Product> findByHaveDiscount();
+
+    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0")
+    Page<Product> findByHaveDiscountPage(Pageable pageable);
+
     @Query("SELECT v FROM Product v WHERE v.nameProduct LIKE %:nameProduct%")
     Page<Product> findByNamePage(@Param("nameProduct") String nameProduct,Pageable pageable);
 }

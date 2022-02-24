@@ -23,7 +23,10 @@ public class AccountController {
     }
 
     @GetMapping("/loginadmin")
-    @ResponseBody
+    public List<Account> getAccountLoginadmin(@RequestParam("email") String email, @RequestParam("password") String password){
+        return accountService.getAccountLogined(email,password);
+    }
+    @GetMapping("/login")
     public List<Account> getAccountLogin(@RequestParam("email") String email, @RequestParam("password") String password){
         return accountService.getAccountLogined(email,password);
     }
