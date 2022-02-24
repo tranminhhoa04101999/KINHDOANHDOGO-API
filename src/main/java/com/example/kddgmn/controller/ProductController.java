@@ -38,6 +38,10 @@ public class ProductController {
     public PagedResponse<Product> getAllPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
         return productsService.getAllProductPage(page,size);
     }
+    @GetMapping("/findWithIdCategoryPage")
+    public PagedResponse<Product> findWithIdCategoryPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size,@RequestParam("idCategory") Integer idCategory){
+        return productsService.findWithIdCategoryPage(page,size,idCategory);
+    }
     @GetMapping("/allproductby")
     public List<Product> findByIdCategory(@RequestParam("idCategory") Integer idCategory){
         return productsService.findByIdCategory(idCategory);

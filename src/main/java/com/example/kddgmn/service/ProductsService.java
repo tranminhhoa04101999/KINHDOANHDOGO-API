@@ -62,6 +62,21 @@ public class ProductsService {
         return new PagedResponse<>(productRes, products.getNumber(), products.getSize(), products.getTotalElements(),
                 products.getTotalPages(), products.isLast());
     }
+    public PagedResponse<Product> findWithIdCategoryPage(Integer page, Integer size, Integer idCategory){
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC,"price");
+        Page<Product> products = productRepository.findWithIdCategoryPage(idCategory,pageable);
+
+        if (products.getNumberOfElements() == 0) {
+            return new PagedResponse<>(Collections.emptyList(), products.getNumber(), products.getSize(),
+                    products.getTotalElements(), products.getTotalPages(), products.isLast());
+        }
+        List<Product> productRes = products.getContent();
+
+
+        return new PagedResponse<>(productRes, products.getNumber(), products.getSize(), products.getTotalElements(),
+                products.getTotalPages(), products.isLast());
+    }
+
     public List<Product> findByIdCategory(Integer idCategory){
         return productRepository.findByIdcategory(idCategory);
     }
