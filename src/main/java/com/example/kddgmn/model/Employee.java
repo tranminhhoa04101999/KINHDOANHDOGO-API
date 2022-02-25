@@ -15,8 +15,7 @@ public class Employee {
     private String name;
     private String phone;
     private String address;
-    @Column(name = "imgurl")
-    private String imgURL;
+
     @Column(name = "datebegin")
     private Date dateBegin;
     @Column(name = "dateend")
@@ -31,12 +30,12 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Integer idEmployee, String name, String phone, String address, String imgURL, Date dateBegin, Date dateEnd, Integer isWorking, Account account) {
+    public Employee(Integer idEmployee, String name, String phone, String address, Date dateBegin, Date dateEnd, Integer isWorking, Account account) {
         this.idEmployee = idEmployee;
         this.name = name;
         this.phone = phone;
         this.address = address;
-        this.imgURL = imgURL;
+
         this.dateBegin = dateBegin;
         this.dateEnd = dateEnd;
         this.isWorking = isWorking;
@@ -75,13 +74,6 @@ public class Employee {
         this.address = address;
     }
 
-    public String getImgURL() {
-        return imgURL;
-    }
-
-    public void setImgURL(String imgURL) {
-        this.imgURL = imgURL;
-    }
 
     public Date getDateBegin() {
         return dateBegin;
@@ -122,7 +114,6 @@ public class Employee {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
-                ", imgURL='" + imgURL + '\'' +
                 ", dateBegin=" + dateBegin +
                 ", dateEnd=" + dateEnd +
                 ", isWorking=" + isWorking +

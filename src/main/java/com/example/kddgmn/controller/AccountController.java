@@ -27,8 +27,8 @@ public class AccountController {
         return accountService.getAccountLogined(email,password);
     }
     @GetMapping("/login")
-    public List<Account> getAccountLogin(@RequestParam("email") String email, @RequestParam("password") String password){
-        return accountService.getAccountLogined(email,password);
+    public List<Account> findByEmailByPasswordIsCustomer(@RequestParam("email") String email, @RequestParam("password") String password){
+        return accountService.findByEmailByPasswordIsCustomer(email,password);
     }
     @PostMapping("/addAccount")
     public Integer save(@RequestBody Account account){
@@ -41,5 +41,10 @@ public class AccountController {
     @GetMapping("/getAccountById")
     public Account getAccountById(@RequestParam("id") Integer id){
         return accountService.getAccountById(id);
+    }
+
+    @PostMapping("/changePass")
+    public Integer changePass(@RequestParam("email") String email,@RequestParam("oldPass") String oldPass,@RequestParam("newPass") String newPass){
+        return accountService.changePassword(email, oldPass, newPass);
     }
 }

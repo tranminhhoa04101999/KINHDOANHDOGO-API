@@ -14,8 +14,6 @@ public class Customer {
     private String name;
     private String phone;
     private String address;
-    @Column(name = "imgurl")
-    private String imgURL;
     @Column(name = "datecreate")
     private Date dateCreate;
     @ManyToOne
@@ -25,12 +23,19 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Integer idCustomer, String name, String phone, String address, String imgURL, Date dateCreate, Account account) {
+    public Customer(Integer idCustomer, String name, String phone, String address, Date dateCreate, Account account) {
         this.idCustomer = idCustomer;
         this.name = name;
         this.phone = phone;
         this.address = address;
-        this.imgURL = imgURL;
+        this.dateCreate = dateCreate;
+        this.account = account;
+    }
+
+    public Customer(String name, String phone, String address, Date dateCreate, Account account) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
         this.dateCreate = dateCreate;
         this.account = account;
     }
@@ -67,13 +72,6 @@ public class Customer {
         this.address = address;
     }
 
-    public String getImgURL() {
-        return imgURL;
-    }
-
-    public void setImgURL(String imgURL) {
-        this.imgURL = imgURL;
-    }
 
     public Date getDateCreate() {
         return dateCreate;
@@ -98,7 +96,6 @@ public class Customer {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
-                ", imgURL='" + imgURL + '\'' +
                 ", dateCreate=" + dateCreate +
                 ", account=" + account +
                 '}';

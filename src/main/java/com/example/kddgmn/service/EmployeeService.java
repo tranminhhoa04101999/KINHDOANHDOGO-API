@@ -16,5 +16,16 @@ public class EmployeeService {
     public List<Employee> getAll(){
         return employeeRepository.findAll();
     }
+    public List<Employee> findByIdAccount(int idAccount) {
+        return employeeRepository.findByIdAccount(idAccount);
+    }
+    public Integer save(Employee employee){
+        try {
+             employeeRepository.save(employee);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
 
 }

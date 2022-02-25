@@ -26,6 +26,10 @@ public class Account {
     public Account() {
     }
 
+    public Account(Integer idAccount) {
+        this.idAccount = idAccount;
+    }
+
     public Account(Integer idAccount, String email, String password, Role role, Integer isActive) {
         this.idAccount = idAccount;
         this.email = email;

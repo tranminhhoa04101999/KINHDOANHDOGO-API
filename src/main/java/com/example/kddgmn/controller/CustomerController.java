@@ -3,9 +3,7 @@ package com.example.kddgmn.controller;
 import com.example.kddgmn.model.Customer;
 import com.example.kddgmn.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,5 +16,14 @@ public class CustomerController {
     @GetMapping("/allcustomer")
     public List<Customer> getAll(){
         return customerService.getALl();
+    }
+    @PostMapping("/saveCustomer")
+    public Integer save(@RequestBody Customer customer){
+        return customerService.save(customer);
+    }
+
+    @GetMapping("/findCustomerByIdAccount")
+    public Customer findByIdAccount(@RequestParam("idAccount") Integer idAccount){
+        return customerService.findByIdAccount(idAccount);
     }
 }
