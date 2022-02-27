@@ -32,6 +32,10 @@ public class Product {
     public Product() {
     }
 
+    public Product(Integer idProduct) {
+        this.idProduct = idProduct;
+    }
+
     public Product(Integer idProduct, String nameProduct, Double price, String color, String descProduct, Integer quantity, Date addDate, Integer isActive, Discount discount, Category category) {
         this.idProduct = idProduct;
         this.nameProduct = nameProduct;

@@ -10,4 +10,7 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
     @Query("SELECT v FROM Customer v WHERE v.account.idAccount= :idAccount")
     Customer findByIdAccount (@Param("idAccount") Integer idAccount);
+
+    @Query("SELECT MAX(v.idCustomer) FROM Customer v")
+    Integer findIdMax();
 }

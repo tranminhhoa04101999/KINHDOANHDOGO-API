@@ -23,6 +23,10 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(Integer idCustomer) {
+        this.idCustomer = idCustomer;
+    }
+
     public Customer(Integer idCustomer, String name, String phone, String address, Date dateCreate, Account account) {
         this.idCustomer = idCustomer;
         this.name = name;

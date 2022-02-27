@@ -36,6 +36,10 @@ public class Orders {
     public Orders() {
     }
 
+    public Orders(Integer idOrders) {
+        this.idOrders = idOrders;
+    }
+
     public Orders(Integer idOrders, String phone, String address, String note, Double total, Date dateCreate, Date dateModified, Date dateEnd, Status status, Customer customer, Employee employee) {
         this.idOrders = idOrders;
         this.phone = phone;

@@ -33,4 +33,15 @@ public class CustomerService {
     public Customer findByIdAccount(Integer idAccount){
         return customerRepository.findByIdAccount(idAccount);
     }
+    public Integer saveWithNoAccount(Customer customer){
+        try {
+            customerRepository.save(customer);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
+    public Integer findMaxId (){
+        return customerRepository.findIdMax();
+    }
 }
