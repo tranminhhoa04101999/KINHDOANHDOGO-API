@@ -1,6 +1,8 @@
 package com.example.kddgmn.service;
 
 import com.example.kddgmn.model.Product;
+import com.example.kddgmn.payload.CommonResponse;
+import com.example.kddgmn.payload.OrderItemProduct;
 import com.example.kddgmn.payload.PagedResponse;
 import com.example.kddgmn.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +34,6 @@ public class ProductsService {
     }
     public Integer save(Product product){
         try {
-            System.out.println(product.getPrice());
 
             productRepository.save(product);
         }catch (Exception ex){
@@ -172,4 +174,32 @@ public class ProductsService {
         return new PagedResponse<>(productRes, products.getNumber(), products.getSize(), products.getTotalElements(),
                 products.getTotalPages(), products.isLast());
     }
+
+    public List<CommonResponse> checkQuantity(List<OrderItemProduct> orderItemProducts){
+        List<CommonResponse> commonResponses = new ArrayList<>();
+        for (int i = 0; i < orderItemProducts.size(); i++) {
+            Product product = productRepository.findById(orderItemProducts.get(i).getIdProduct()).get();
+            if(product.getQuantity() - orderItemProducts.get(i).getQuantity() >= 0){
+            }
+            else{
+                CommonResponse item = new CommonResponse(product.getIdProduct(), product.getNameProduct() +" không đủ số lượng");
+                commonResponses.add(item);
+            }
+        }
+        return commonResponses;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

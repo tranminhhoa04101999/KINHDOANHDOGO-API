@@ -22,4 +22,8 @@ public class OrderItemsController {
     public Integer saveOrderItems(@RequestBody List<OrderItemProduct> orderItemProduct){
         return orderItemsService.saveOrderItem(orderItemProduct);
     }
+    @GetMapping("/orderItemsfindByIdOrders")
+    public List<OrderItems> findByIdOrders(@RequestParam("idOrders") int idOrders){
+        return orderItemsService.findByIdOrders(idOrders);
+    }
 }

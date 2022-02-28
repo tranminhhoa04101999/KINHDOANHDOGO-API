@@ -1,6 +1,8 @@
 package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.Product;
+import com.example.kddgmn.payload.CommonResponse;
+import com.example.kddgmn.payload.OrderItemProduct;
 import com.example.kddgmn.payload.PagedResponse;
 import com.example.kddgmn.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +83,9 @@ public class ProductController {
     @GetMapping("/findByNewOneWeekPage")
     public PagedResponse<Product> findByNewOneWeekPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
         return productsService.findByNewOneWeekPage(page,size);
+    }
+    @PostMapping("/checkQuantityProduct")
+    public List<CommonResponse> checkQuantity(@RequestBody List<OrderItemProduct> orderItemProducts){
+        return productsService.checkQuantity(orderItemProducts);
     }
 }

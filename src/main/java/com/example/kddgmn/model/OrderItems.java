@@ -12,6 +12,9 @@ public class OrderItems {
     private Integer idOrderItems;
     private Integer quantity;
 
+    @Column(name= "pricecurrent")
+    private Double priceCurrent;
+
     @ManyToOne
     @JoinColumn(name = "idorders")
     private Orders orders;
@@ -23,9 +26,17 @@ public class OrderItems {
     public OrderItems() {
     }
 
-    public OrderItems(Integer idOrderItems, Integer quantity, Orders orders, Product product) {
+    public OrderItems(Integer quantity, Double priceCurrent, Orders orders, Product product) {
+        this.quantity = quantity;
+        this.priceCurrent = priceCurrent;
+        this.orders = orders;
+        this.product = product;
+    }
+
+    public OrderItems(Integer idOrderItems, Integer quantity, Double priceCurrent, Orders orders, Product product) {
         this.idOrderItems = idOrderItems;
         this.quantity = quantity;
+        this.priceCurrent = priceCurrent;
         this.orders = orders;
         this.product = product;
     }
@@ -46,11 +57,19 @@ public class OrderItems {
         this.quantity = quantity;
     }
 
-    public Orders getOrder() {
+    public Double getPriceCurrent() {
+        return priceCurrent;
+    }
+
+    public void setPriceCurrent(Double priceCurrent) {
+        this.priceCurrent = priceCurrent;
+    }
+
+    public Orders getOrders() {
         return orders;
     }
 
-    public void setOrder(Orders orders) {
+    public void setOrders(Orders orders) {
         this.orders = orders;
     }
 
@@ -67,7 +86,8 @@ public class OrderItems {
         return "OrderItems{" +
                 "idOrderItems=" + idOrderItems +
                 ", quantity=" + quantity +
-                ", order=" + orders +
+                ", priceCurrent=" + priceCurrent +
+                ", orders=" + orders +
                 ", product=" + product +
                 '}';
     }
