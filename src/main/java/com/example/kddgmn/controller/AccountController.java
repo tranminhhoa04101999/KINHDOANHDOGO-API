@@ -47,4 +47,8 @@ public class AccountController {
     public Integer changePass(@RequestParam("email") String email,@RequestParam("oldPass") String oldPass,@RequestParam("newPass") String newPass){
         return accountService.changePassword(email, oldPass, newPass);
     }
+    @PostMapping("/updateAccountWithAdmin")
+    public Integer updateAccountWithAdmin(@RequestBody Account account){
+        return accountService.updateAccountWithAdmin(account);
+    }
 }

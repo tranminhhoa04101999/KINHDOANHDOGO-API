@@ -38,6 +38,20 @@ public class AccountService {
         }
         return 1;
     }
+    public Integer updateAccountWithAdmin(Account account){
+        try{
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(account.getPassword().getBytes());
+            byte[] digest = md.digest();
+            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            account.setPassword(myHash);
+
+            accountRepository.save(account);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
     public List<Account> getAccountLogined(String email,String password){
         try{
             MessageDigest md = MessageDigest.getInstance("MD5");
