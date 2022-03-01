@@ -26,4 +26,8 @@ public class OrderController {
     public List<SearchOrderResponse> searchOrderByIdOrPhone(@RequestParam("idStatus") int idStatus, @RequestParam("idOrders") int idOrders, @RequestParam("phone") String phone){
         return ordersService.searchOrderByIdOrPhone(idOrders,idStatus,phone);
     }
+    @PostMapping("/UpdateStatusByidStatusAndId")
+    public Integer UpdateStatusByidStatusAndId(@RequestParam("idStatus") int idStatus,@RequestParam("idOrders") int idOrders,@RequestParam("idEmployee") int idEmployee){
+        return ordersService.UpdateStatusByidStatusAndId(idStatus,idOrders,idEmployee);
+    }
 }

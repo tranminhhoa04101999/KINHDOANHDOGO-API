@@ -1,6 +1,8 @@
 package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.Discount;
+import com.example.kddgmn.model.Product;
+import com.example.kddgmn.payload.ProductSearchResponse;
 import com.example.kddgmn.service.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +27,13 @@ public class DiscountController {
     @PostMapping("/deleleByidDiscount")
     public Integer deleteById(@RequestParam("idDiscount") Integer id){
         return  discountService.deleteById(id);
+    }
+    @PostMapping("/UpdateProductByidDiscountAndId")
+    public Integer UpdateProductByidDiscountAndId (@RequestBody List<Integer> listIdProduct,@RequestParam("idDiscount") int idDiscount){
+        return discountService.UpdateDiscountByidDiscountAndId(listIdProduct, idDiscount);
+    }
+    @GetMapping("/discountFindProductByIdDiscount")
+    public List<ProductSearchResponse> ShowProductByIdDiscount(@RequestParam("idDiscount") int idDiscount){
+        return discountService.ShowfindProductByIdDiscount(idDiscount);
     }
 }

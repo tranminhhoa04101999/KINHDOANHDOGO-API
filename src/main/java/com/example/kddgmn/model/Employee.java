@@ -30,6 +30,10 @@ public class Employee {
     public Employee() {
     }
 
+    public Employee(Integer idEmployee) {
+        this.idEmployee = idEmployee;
+    }
+
     public Employee(Integer idEmployee, String name, String phone, String address, Date dateBegin, Date dateEnd, Integer isWorking, Account account) {
         this.idEmployee = idEmployee;
         this.name = name;

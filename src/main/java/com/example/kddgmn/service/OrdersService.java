@@ -1,9 +1,6 @@
 package com.example.kddgmn.service;
 
-import com.example.kddgmn.model.Customer;
-import com.example.kddgmn.model.OrderItems;
-import com.example.kddgmn.model.Orders;
-import com.example.kddgmn.model.Product;
+import com.example.kddgmn.model.*;
 import com.example.kddgmn.payload.ImgProductResponse;
 import com.example.kddgmn.payload.ProductSearchResponse;
 import com.example.kddgmn.payload.SearchOrderResponse;
@@ -89,5 +86,34 @@ public class OrdersService {
         }
 
         return searchOrderResponses;
+    }
+    public Integer UpdateStatusByidStatusAndId(int idStatus,int idOrders,int idEmployee){
+        try {
+            if(idStatus >= 5){
+                Date date = new Date();
+                Orders orders = ordersRepository.findById(idOrders).get();
+                orders.setDateEnd(date);
+                Employee employee = new Employee(idEmployee);
+                orders.setEmployee(employee);
+                Status status = new Status(idStatus);
+                orders.setStatus(status);
+                ordersRepository.save(orders);
+            }
+            else{
+                Date date = new Date();
+                Orders orders = ordersRepository.findById(idOrders).get();
+                orders.setDateModified(date);
+                Employee employee = new Employee(idEmployee);
+                orders.setEmployee(employee);
+                Status status = new Status(idStatus);
+                orders.setStatus(status);
+                ordersRepository.save(orders);
+            }
+
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return 0;
+        }
+        return 1;
     }
 }
