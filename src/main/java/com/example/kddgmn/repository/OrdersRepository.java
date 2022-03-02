@@ -21,4 +21,7 @@ public interface OrdersRepository extends JpaRepository<Orders,Integer> {
     @Query("UPDATE Orders v SET v.status.idStatus= :idStatus WHERE v.idOrders= :idOrders")
     void UpdateStatusByidStatusAndId(@Param("idStatus") int idStatus,@Param("idOrders") int idOrders);
 
+    @Query("SELECT v FROM Orders v WHERE v.customer.idCustomer= :idCustomer")
+    List<Orders> findByIdCustomer(@Param("idCustomer") int idCustomer);
+
 }

@@ -39,8 +39,14 @@ public class OrderItemsService {
 
                 // lấy product ra trừ số lượng khi thêm thành công~
                 Product prod = productsService.getProductwithid(orderItemProduct.get(i).getIdProduct());
+                Double price = prod.getPrice();
+                if(prod.getDiscount() != null ){
+                    if(prod.getDiscount().getIsActive() == 1) {
+                        price = price - (price * prod.getDiscount().getPercent());
+                    }
+                }
+                orderItems.setPriceCurrent(price);
 
-                orderItems.setPriceCurrent(prod.getPrice());
                 orderItemsRepository.save(orderItems);
 
 //                System.out.println(prod);

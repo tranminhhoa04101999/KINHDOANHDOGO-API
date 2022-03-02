@@ -51,4 +51,9 @@ public class AccountController {
     public Integer updateAccountWithAdmin(@RequestBody Account account){
         return accountService.updateAccountWithAdmin(account);
     }
+
+    @PostMapping("/addAccountAdmin")
+    public Integer saveAdmin(@RequestBody Account account){
+        return accountService.saveAddmin(account);
+    }
 }

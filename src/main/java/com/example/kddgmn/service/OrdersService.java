@@ -4,6 +4,7 @@ import com.example.kddgmn.model.*;
 import com.example.kddgmn.payload.ImgProductResponse;
 import com.example.kddgmn.payload.ProductSearchResponse;
 import com.example.kddgmn.payload.SearchOrderResponse;
+import com.example.kddgmn.repository.CustomerRepository;
 import com.example.kddgmn.repository.OrderItemsRepository;
 import com.example.kddgmn.repository.OrdersRepository;
 import org.hibernate.criterion.Order;
@@ -27,6 +28,9 @@ public class OrdersService {
 
     @Autowired
     private  ImgProductService imgProductService;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     public List<Orders> getAll(){
         return ordersRepository.findAll();
@@ -75,7 +79,7 @@ public class OrdersService {
                 Product product = orderitems.get(j).getProduct();
                 List<ImgProductResponse> imgProductResponses = imgProductService.getImgByIdProd(product.getIdProduct());
                 ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(),orderitems.get(j).getPriceCurrent()
-                        ,product.getColor(),product.getQuantity(),imgProductResponses.get(0).getImgURL());
+                        ,product.getColor(),orderitems.get(j).getQuantity(),imgProductResponses.get(0).getImgURL());
                 productSearchResponses.add(productSearchResponse);
             }
 
@@ -87,6 +91,39 @@ public class OrdersService {
 
         return searchOrderResponses;
     }
+
+    public List<SearchOrderResponse> searchOrderByIdAccount(int idAccount){
+        // lấy ra customer
+        Customer customer = customerRepository.findByIdAccount(idAccount);
+        List<SearchOrderResponse> searchOrderResponses = new ArrayList<>();
+
+        if(customer == null){
+            return searchOrderResponses;
+        }
+        List<Orders> ordersList = ordersRepository.findByIdCustomer(customer.getIdCustomer());
+
+        for (int i = 0; i < ordersList.size(); i++) {
+            List<ProductSearchResponse> productSearchResponses = new ArrayList<>();
+            SearchOrderResponse searchOrderResponse = new SearchOrderResponse();
+            List<OrderItems> orderitems = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
+
+            for (int j = 0; j < orderitems.size(); j++) {
+                Product product = orderitems.get(j).getProduct();
+                List<ImgProductResponse> imgProductResponses = imgProductService.getImgByIdProd(product.getIdProduct());
+                ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(),orderitems.get(j).getPriceCurrent()
+                        ,product.getColor(),orderitems.get(j).getQuantity(),imgProductResponses.get(0).getImgURL());
+                productSearchResponses.add(productSearchResponse);
+            }
+
+            searchOrderResponse.setProductSearchResponses(productSearchResponses);
+            searchOrderResponse.setOrders(ordersList.get(i));
+
+            searchOrderResponses.add(searchOrderResponse);
+        }
+
+        return searchOrderResponses;
+    }
+
     public Integer UpdateStatusByidStatusAndId(int idStatus,int idOrders,int idEmployee){
         try {
             if(idStatus >= 5){

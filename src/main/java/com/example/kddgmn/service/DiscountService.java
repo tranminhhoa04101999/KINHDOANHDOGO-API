@@ -69,4 +69,14 @@ public class DiscountService {
 
         return productSearchResponses;
     }
+    public Integer RemoveByidDiscountAndId(int idProduct){
+        try{
+            productRepository.RemoveDiscountById(idProduct);
+        }catch (Exception ex){
+
+            return 0;
+        }
+
+        return 1;
+    }
 }

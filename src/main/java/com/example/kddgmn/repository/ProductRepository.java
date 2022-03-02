@@ -33,10 +33,10 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("SELECT v FROM Product v WHERE v.addDate> :date")
     Page<Product> findByNewOneWeekPage(@Param("date") Date date,Pageable pageable);
 
-    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0")
+    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0 AND v.discount.isActive = 1")
     List<Product> findByHaveDiscount();
 
-    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0")
+    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0 AND v.discount.isActive = 1")
     Page<Product> findByHaveDiscountPage(Pageable pageable);
 
     @Query("SELECT v FROM Product v WHERE v.nameProduct LIKE %:nameProduct%")
@@ -46,4 +46,10 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Modifying
     @Query("UPDATE Product v SET v.discount.idDiscount= :idDiscount WHERE v.idProduct= :idProduct")
     void UpdateDiscountByidDiscountAndId(@Param("idDiscount") int idDiscount,@Param("idProduct") int idProduct);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Product v SET v.discount.idDiscount= null WHERE v.idProduct= :idProduct")
+    void RemoveDiscountById(@Param("idProduct") int idProduct);
+
 }

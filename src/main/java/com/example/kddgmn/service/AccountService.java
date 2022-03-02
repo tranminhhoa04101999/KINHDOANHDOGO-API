@@ -1,19 +1,30 @@
 package com.example.kddgmn.service;
 
 import com.example.kddgmn.model.Account;
+import com.example.kddgmn.model.Customer;
+import com.example.kddgmn.model.Employee;
 import com.example.kddgmn.model.Role;
 import com.example.kddgmn.repository.AccountRepository;
+import com.example.kddgmn.repository.CustomerRepository;
+import com.example.kddgmn.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     public List<Account> getAll(){
         return accountRepository.findAll();
@@ -34,6 +45,47 @@ public class AccountService {
 
             accountRepository.save(account);
         }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
+    public Integer saveAddmin(Account account){
+        try{
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(account.getPassword().getBytes());
+            byte[] digest = md.digest();
+            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            account.setPassword(myHash);
+
+
+            if(accountRepository.findByEmail(account.getEmail()).size() > 0){
+                return 2; //tai khoan da ton tai
+            }
+            Employee employee = new Employee();
+            Customer customer = new Customer();
+
+            if(account.getRole().getIdRole() == 1 || account.getRole().getIdRole() == 2)
+            {
+                employee.setName("");
+                employee.setPhone("");
+                employee.setAccount(account);
+                employee.setAddress("");
+                employee.setDateBegin(new Date());
+                employee.setIsWorking(account.getIsActive());
+                accountRepository.save(account);
+                employeeRepository.save(employee);
+            }
+            if(account.getRole().getIdRole() == 3){
+                customer.setName("");
+                customer.setPhone("");
+                customer.setAddress("");
+                customer.setDateCreate(new Date());
+                customer.setAccount(account);
+                accountRepository.save(account);
+                customerRepository.save(customer);
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
             return 0;
         }
         return 1;

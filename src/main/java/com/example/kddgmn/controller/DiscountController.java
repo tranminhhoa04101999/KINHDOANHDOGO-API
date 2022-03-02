@@ -36,4 +36,8 @@ public class DiscountController {
     public List<ProductSearchResponse> ShowProductByIdDiscount(@RequestParam("idDiscount") int idDiscount){
         return discountService.ShowfindProductByIdDiscount(idDiscount);
     }
+    @PostMapping("/RemoveByIdProduct")
+    public Integer RemoveByIdProduct(@RequestParam("idProduct") int idProduct){
+        return discountService.RemoveByidDiscountAndId(idProduct);
+    }
 }

@@ -68,10 +68,12 @@ public class ProductController {
     public List<Product> findByNewOneWeek(){
         return productsService.findByNewOneWeek();
     }
+
     @GetMapping("/findByHaveDiscount")
     public List<Product> findByHaveDiscount(){
         return productsService.findByHaveDiscount();
     }
+
     @GetMapping("/findByHaveDiscountPage")
     public PagedResponse<Product> findByHaveDiscount(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
         return productsService.findByHaveDiscountPage(page,size);
