@@ -65,4 +65,7 @@ public class OrderItemsService {
     public List<OrderItems> findByIdOrders (int idOrders){
         return orderItemsRepository.findByIdOrders(idOrders);
     }
+    public int checkProductHaveOrderItems(int idProduct){
+        return orderItemsRepository.checkProductHaveOrderItems(idProduct);
+    }
 }

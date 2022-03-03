@@ -26,4 +26,8 @@ public class OrderItemsController {
     public List<OrderItems> findByIdOrders(@RequestParam("idOrders") int idOrders){
         return orderItemsService.findByIdOrders(idOrders);
     }
+    @GetMapping("/checkProductHaveOrderItems")
+    public int checkProductHaveOrderItems(@RequestParam("idProduct") int idProduct){
+        return orderItemsService.checkProductHaveOrderItems(idProduct);
+    }
 }
