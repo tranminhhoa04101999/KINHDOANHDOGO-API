@@ -1,9 +1,7 @@
 package com.example.kddgmn.service;
 
 import com.example.kddgmn.model.*;
-import com.example.kddgmn.payload.ImgProductResponse;
-import com.example.kddgmn.payload.ProductSearchResponse;
-import com.example.kddgmn.payload.SearchOrderResponse;
+import com.example.kddgmn.payload.*;
 import com.example.kddgmn.repository.CustomerRepository;
 import com.example.kddgmn.repository.OrderItemsRepository;
 import com.example.kddgmn.repository.OrdersRepository;
@@ -11,6 +9,8 @@ import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -153,4 +153,70 @@ public class OrdersService {
         }
         return 1;
     }
+    public List<ChartOrdersResponse> getDataChartOrders (){
+        LocalDate dateNowSub = LocalDate.now().minusDays(6); // ngày hiện tại trừ 7 ngày
+        Date dateAdd = Date.from(dateNowSub.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        List<ChartOrdersResponse> chartOrdersResponses = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findByDateCreateLonHon(dateAdd);
+
+        for (int i = 0; i < ordersList.size(); i++) {
+            ChartOrdersResponse chartOrdersResponse = new ChartOrdersResponse();
+            if(chartOrdersResponses.size() == 0){
+                chartOrdersResponse.setDate(ordersList.get(i).getDateCreate());
+                chartOrdersResponse.setQuantity(1);
+                chartOrdersResponses.add(chartOrdersResponse);
+
+            }else{
+                for (int j = 0; j < chartOrdersResponses.size(); j++) {
+                    if(chartOrdersResponses.get(j).getDate().equals(ordersList.get(i).getDateCreate())){
+                        chartOrdersResponse.setQuantity(chartOrdersResponses.get(j).getQuantity() +1);
+                        chartOrdersResponse.setDate(chartOrdersResponses.get(j).getDate());
+                        chartOrdersResponses.set(j,chartOrdersResponse);
+                    }
+                    else {
+                        if(j == chartOrdersResponses.size() - 1){
+                            chartOrdersResponse.setDate(ordersList.get(i).getDateCreate());
+                            chartOrdersResponse.setQuantity(1);
+                            chartOrdersResponses.add(chartOrdersResponse);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return  chartOrdersResponses;
+    }
+    public List<ChartTotalResponse> getDataChartTotal (){
+        LocalDate dateNowSub = LocalDate.now();
+        Date date = Date.from(dateNowSub.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        List<ChartTotalResponse> ChartTotalResponses = new ArrayList<>();
+
+        List<Orders> ordersList = ordersRepository.findByYearCreate(date);
+
+        for (int i = 0; i < 12; i++) {
+            ChartTotalResponse chartTotalResponse = new ChartTotalResponse();
+            Date date1 = new Date();
+            date1.setTime(1);
+            date1.setMonth(i);
+            date1.setYear(new Date().getYear());
+            chartTotalResponse.setDate(date1);
+            chartTotalResponse.setTotal(0.0);
+            ChartTotalResponses.add(chartTotalResponse);
+        }
+
+        for (int i = 0; i < ordersList.size(); i++) {
+            ChartTotalResponse chartTotalResponse = new ChartTotalResponse();
+                for (int j = 0; j < ChartTotalResponses.size(); j++) {
+                    if(ChartTotalResponses.get(j).getDate().getMonth() == ordersList.get(i).getDateCreate().getMonth()){
+                        chartTotalResponse.setTotal(ChartTotalResponses.get(j).getTotal() + ordersList.get(i).getTotal());
+                        chartTotalResponse.setDate(ChartTotalResponses.get(j).getDate());
+                        ChartTotalResponses.set(j,chartTotalResponse);
+                    }
+
+            }
+        }
+        return  ChartTotalResponses;
+    }
+
+
 }

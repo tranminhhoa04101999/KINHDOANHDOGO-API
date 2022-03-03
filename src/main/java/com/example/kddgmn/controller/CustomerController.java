@@ -1,6 +1,7 @@
 package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.Customer;
+import com.example.kddgmn.payload.ChartOrdersResponse;
 import com.example.kddgmn.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +26,10 @@ public class CustomerController {
     @GetMapping("/findCustomerByIdAccount")
     public Customer findByIdAccount(@RequestParam("idAccount") Integer idAccount){
         return customerService.findByIdAccount(idAccount);
+    }
+
+    @GetMapping("/findByDatecreateInYear")
+    public List<ChartOrdersResponse> findByDatecreateInYear(){
+        return customerService.findByDatecreateInYear();
     }
 }

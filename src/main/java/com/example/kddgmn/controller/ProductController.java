@@ -4,6 +4,7 @@ import com.example.kddgmn.model.Product;
 import com.example.kddgmn.payload.CommonResponse;
 import com.example.kddgmn.payload.OrderItemProduct;
 import com.example.kddgmn.payload.PagedResponse;
+import com.example.kddgmn.payload.TopSaleResponse;
 import com.example.kddgmn.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -89,5 +90,9 @@ public class ProductController {
     @PostMapping("/checkQuantityProduct")
     public List<CommonResponse> checkQuantity(@RequestBody List<OrderItemProduct> orderItemProducts){
         return productsService.checkQuantity(orderItemProducts);
+    }
+    @GetMapping("/getTop3Sale")
+    public List<TopSaleResponse> getTop3Sale(){
+        return productsService.getTop3Sale();
     }
 }

@@ -1,6 +1,8 @@
 package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.Orders;
+import com.example.kddgmn.payload.ChartOrdersResponse;
+import com.example.kddgmn.payload.ChartTotalResponse;
 import com.example.kddgmn.payload.SearchOrderResponse;
 import com.example.kddgmn.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +37,15 @@ public class OrderController {
     @PostMapping("/UpdateStatusByidStatusAndId")
     public Integer UpdateStatusByidStatusAndId(@RequestParam("idStatus") int idStatus,@RequestParam("idOrders") int idOrders,@RequestParam("idEmployee") int idEmployee){
         return ordersService.UpdateStatusByidStatusAndId(idStatus,idOrders,idEmployee);
+    }
+
+    @GetMapping("/getDataChartOrders")
+    public List<ChartOrdersResponse> getDataChartOrders(){
+        return ordersService.getDataChartOrders();
+    }
+
+    @GetMapping("/getDataChartTotal")
+    public List<ChartTotalResponse> getDataChartTotal(){
+        return ordersService.getDataChartTotal();
     }
 }
