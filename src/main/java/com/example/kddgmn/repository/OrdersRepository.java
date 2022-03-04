@@ -31,5 +31,6 @@ public interface OrdersRepository extends JpaRepository<Orders,Integer> {
     @Query("SELECT v FROM Orders v WHERE year(v.dateCreate) = year(:date) AND v.status.idStatus != 6")
     List<Orders> findByYearCreate(@Param("date") Date date);
 
-
+    @Query("SELECT v.idOrders FROM Orders v WHERE v.customer.idCustomer= :idCustomer AND v.status.idStatus = 5")
+    List<Integer> findIdByCustomerAndStatus5(@Param("idCustomer") int idCustomer);
 }

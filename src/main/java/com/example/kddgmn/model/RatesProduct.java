@@ -2,6 +2,7 @@ package com.example.kddgmn.model;
 
 import javax.persistence.*;
 
+@Entity
 @Table(name = "ratesproduct")
 public class RatesProduct {
     @Id
@@ -32,6 +33,13 @@ public class RatesProduct {
 
     public RatesProduct(Integer idRateProduct, Product product, Orders orders, String descRate, float pointRate) {
         this.idRateProduct = idRateProduct;
+        this.product = product;
+        this.orders = orders;
+        this.descRate = descRate;
+        this.pointRate = pointRate;
+    }
+
+    public RatesProduct(Product product, Orders orders, String descRate, float pointRate) {
         this.product = product;
         this.orders = orders;
         this.descRate = descRate;
