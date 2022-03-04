@@ -56,4 +56,9 @@ public class AccountController {
     public Integer saveAdmin(@RequestBody Account account){
         return accountService.saveAddmin(account);
     }
+
+    @GetMapping("/getforgotPassword")
+    public int getforgotPassword(@RequestParam("email") String email){
+        return accountService.getforgotPassword(email);
+    }
 }

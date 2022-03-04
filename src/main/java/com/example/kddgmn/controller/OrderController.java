@@ -48,4 +48,9 @@ public class OrderController {
     public List<ChartTotalResponse> getDataChartTotal(){
         return ordersService.getDataChartTotal();
     }
+
+    @PostMapping("/huyOrder")
+    public  int huyOrder(@RequestParam("idOrder") int idOrder){
+        return ordersService.huyOrder(idOrder);
+    }
 }

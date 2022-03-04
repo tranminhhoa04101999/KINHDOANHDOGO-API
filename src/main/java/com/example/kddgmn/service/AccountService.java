@@ -11,9 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.DatatypeConverter;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 import java.security.MessageDigest;
-import java.util.Date;
-import java.util.List;
+import java.util.Properties;
 
 @Service
 public class AccountService {
@@ -168,5 +172,60 @@ public class AccountService {
             return 0;
         }
         return  1;
+    }
+    public int getforgotPassword(String email){
+        try{
+            final String fromEmail = "tmhoa111@gmail.com";
+            // Mat khai email cua ban
+            final String password = "eunhyukL1";
+            // dia chi email nguoi nhan
+            final String toEmail = email;
+            final String subject = "TMH ĐỒ GỖ MỸ NGHỆ";
+
+            Random rand = new Random();
+            int randomPass = rand.nextInt((999999-100000) + 1) + 100000;
+
+            final String body = "Mật khẩu mới của bạn là " + randomPass;
+            Properties props = new Properties();
+            props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
+            props.put("mail.smtp.port", "587"); //TLS Port
+            props.put("mail.smtp.auth", "true"); //enable authentication
+            props.put("mail.smtp.starttls.enable", "true"); //enable
+            Authenticator auth = new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(fromEmail, password);
+                }
+            };
+            Session session = Session.getInstance(props, auth);
+            MimeMessage msg = new MimeMessage(session);
+            //set message headers
+            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+            msg.addHeader("format", "flowed");
+            msg.addHeader("Content-Transfer-Encoding", "8bit");
+            msg.setFrom(new InternetAddress(fromEmail, "NoReply-JD"));
+            msg.setReplyTo(InternetAddress.parse(fromEmail, false));
+            msg.setSubject(subject, "UTF-8");
+            msg.setText(body, "UTF-8");
+            msg.setSentDate(new Date());
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+            Transport.send(msg);
+
+            List<Account> account = accountRepository.findByEmail(email);
+            if(account.size() == 0){
+                return 2; // email khong ton tai
+            }
+
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(String.valueOf(randomPass).getBytes());
+            byte[] digest = md.digest();
+            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            account.get(0).setPassword(myHash);
+            accountRepository.save(account.get(0));
+
+        }catch (Exception ex){
+            return 0;
+        }
+
+        return 1;
     }
 }

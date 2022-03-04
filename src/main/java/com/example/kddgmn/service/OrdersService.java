@@ -217,6 +217,13 @@ public class OrdersService {
         }
         return  ChartTotalResponses;
     }
-
+    public int huyOrder(int idOrder){
+        try{
+            ordersRepository.UpdateStatusByidStatusAndId(6,idOrder);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
 
 }
