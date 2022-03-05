@@ -3,16 +3,22 @@ package com.example.kddgmn.service;
 import com.example.kddgmn.model.Orders;
 import com.example.kddgmn.model.Product;
 import com.example.kddgmn.model.RatesProduct;
-import com.example.kddgmn.payload.CommonResponse;
-import com.example.kddgmn.payload.OrderCheckRateResponse;
-import com.example.kddgmn.payload.RatesProductRecive;
+import com.example.kddgmn.payload.*;
 import com.example.kddgmn.repository.OrdersRepository;
 import com.example.kddgmn.repository.RatesProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class RatesProductService {
@@ -64,6 +70,46 @@ public class RatesProductService {
         }
 
         return checkList;
+    }
+
+    public RatesProductDetailResponse getRateDetail(int idProduct){
+        List<RatesProduct> ratesProductList = ratesProductRepository.findByIdProduct(idProduct);
+        List<RatesProductResponse> ratesProductResponseList = new ArrayList<>();
+        int one = 0;
+        int two = 0 ;
+        int three = 0;
+        int four = 0;
+        int five = 0;
+        for (int i = 0; i < ratesProductList.size(); i++) {
+            RatesProductResponse ratesProductResponse = new RatesProductResponse(ratesProductList.get(i).getOrders().getCustomer().getName()
+            ,"",ratesProductList.get(i).getPointRate(),ratesProductList.get(i).getDescRate());
+            // thêm time uused
+            String timeUsed = "Đã sử dụng được ";
+            Date date = new Date();
+            int years = date.getYear() - ratesProductList.get(i).getOrders().getDateEnd().getYear();
+            int months = date.getMonth() - ratesProductList.get(i).getOrders().getDateEnd().getMonth();
+            int days = date.getDay() - ratesProductList.get(i).getOrders().getDateEnd().getDay();
+            timeUsed = timeUsed + " "+years+" năm, "+months+" tháng, "+days+" ngày";
+            ratesProductResponse.setTimeUsed(timeUsed);
+            ratesProductResponseList.add(ratesProductResponse);
+            if(ratesProductList.get(i).getPointRate() == 1){
+                one +=1;
+            } else if(ratesProductList.get(i).getPointRate() == 2){
+                two +=1;
+            }else if(ratesProductList.get(i).getPointRate() == 3){
+                three +=1;
+            }else if(ratesProductList.get(i).getPointRate() == 4){
+                four +=1;
+            }else if(ratesProductList.get(i).getPointRate() == 5){
+                five +=1;
+            }
+        }
+        DecimalFormat df = new DecimalFormat("0.00");
+        int mauso = 1;
+        if(ratesProductList.size()>0) mauso=ratesProductList.size();
+        float percentTotal = (float)(one*1 + two*2 + three*3 + four*4 + five*5) / mauso;
+
+        return new RatesProductDetailResponse(ratesProductList.size(),one,two,three,four,five,percentTotal,ratesProductResponseList);
     }
 }
 

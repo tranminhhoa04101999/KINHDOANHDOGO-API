@@ -2,6 +2,7 @@ package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.RatesProduct;
 import com.example.kddgmn.payload.CommonResponse;
+import com.example.kddgmn.payload.RatesProductDetailResponse;
 import com.example.kddgmn.payload.RatesProductRecive;
 import com.example.kddgmn.service.RatesProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,10 @@ public class RatesProductController {
     @GetMapping("/orderCheckRate")
     public List<Integer> OrderCheckRate(@RequestParam("idCustomer") int idCustomer){
         return ratesProductService.OrderCheckRate(idCustomer);
+    }
+
+    @GetMapping("/rateDetails")
+    public RatesProductDetailResponse rateDetails (@RequestParam("idProduct") int idProduct){
+        return ratesProductService.getRateDetail(idProduct);
     }
 }

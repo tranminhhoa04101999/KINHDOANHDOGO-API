@@ -13,4 +13,7 @@ public interface RatesProductRepository extends JpaRepository<RatesProduct,Integ
 
     @Query("SELECT v FROM RatesProduct v WHERE v.orders.idOrders= :idOrders")
     List<RatesProduct> findByIdOrders(@Param("idOrders") int idOrders);
+
+    @Query("SELECT v FROM RatesProduct v WHERE v.product.idProduct= :idProduct")
+    List<RatesProduct> findByIdProduct(@Param("idProduct") int idProduct);
 }
