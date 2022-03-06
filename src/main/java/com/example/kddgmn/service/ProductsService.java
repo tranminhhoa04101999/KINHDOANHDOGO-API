@@ -1,5 +1,6 @@
 package com.example.kddgmn.service;
 
+import com.example.kddgmn.model.Discount;
 import com.example.kddgmn.model.ImgProduct;
 import com.example.kddgmn.model.OrderItems;
 import com.example.kddgmn.model.Product;
@@ -246,6 +247,33 @@ public class ProductsService {
         });
         List<TopSaleResponse> topSaleResponseList1 = topSaleResponseList.subList(0,3);
         return topSaleResponseList1;
+    }
+    public int updateDiscountByListIdCate(List<Integer> idCateList,int idDiscount){
+        try {
+            for (int i = 0; i < idCateList.size(); i++) {
+                List<Product> productList = productRepository.findByIdcategory(idCateList.get(i));
+                for (int j = 0; j < productList.size(); j++) {
+                    productRepository.UpdateDiscountByidDiscountAndId(idDiscount,productList.get(j).getIdProduct());
+                }
+            }
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
+
+    public int updateDiscountNullByListIdCate(List<Integer> idCateList){
+        try {
+            for (int i = 0; i < idCateList.size(); i++) {
+                List<Product> productList = productRepository.findByIdcategory(idCateList.get(i));
+                for (int j = 0; j < productList.size(); j++) {
+                    productRepository.RemoveDiscountById(productList.get(j).getIdProduct());
+                }
+            }
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
     }
 }
 

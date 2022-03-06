@@ -78,8 +78,14 @@ public class OrdersService {
             for (int j = 0; j < orderitems.size(); j++) {
                 Product product = orderitems.get(j).getProduct();
                 List<ImgProductResponse> imgProductResponses = imgProductService.getImgByIdProd(product.getIdProduct());
+                String imgProd = "";
+                if(imgProductResponses.size()==0){
+                    imgProd = "defaultImage";
+                }else{
+                    imgProd = imgProductResponses.get(0).getImgURL();
+                }
                 ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(),orderitems.get(j).getPriceCurrent()
-                        ,product.getColor(),orderitems.get(j).getQuantity(),imgProductResponses.get(0).getImgURL());
+                        ,product.getColor(),orderitems.get(j).getQuantity(),imgProd);
                 productSearchResponses.add(productSearchResponse);
             }
 

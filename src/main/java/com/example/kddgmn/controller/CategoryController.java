@@ -27,4 +27,9 @@ public class CategoryController {
         return  categoryService.deleteById(id);
     }
 
+    @PostMapping("/updateCategory")
+    public Integer update(@RequestBody Category category){
+        return categoryService.update(category);
+    }
+
 }

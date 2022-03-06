@@ -95,4 +95,14 @@ public class ProductController {
     public List<TopSaleResponse> getTop3Sale(){
         return productsService.getTop3Sale();
     }
+
+    @PostMapping("/updateDiscountWithListIdCate")
+    public int updateDiscountWithListIdCate(@RequestBody List<Integer> idCateList,@RequestParam("idDiscount") int idDiscount){
+        return productsService.updateDiscountByListIdCate(idCateList, idDiscount);
+    }
+
+    @PostMapping("/updateDiscountNullByListIdCate")
+    public int updateDiscountNullByListIdCate(@RequestBody List<Integer> idCateList){
+        return productsService.updateDiscountNullByListIdCate(idCateList);
+    }
 }
