@@ -96,13 +96,16 @@ public class AccountService {
     }
     public Integer updateAccountWithAdmin(Account account){
         try{
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(account.getPassword().getBytes());
-            byte[] digest = md.digest();
-            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
-            account.setPassword(myHash);
-
-            accountRepository.save(account);
+            if(account.getPassword() == ""){ //mật khẩu không có thay đổi
+                accountRepository.updateIsActiveById(account.getIsActive(),account.getRole().getIdRole(),account.getIdAccount());
+            }else{
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(account.getPassword().getBytes());
+                byte[] digest = md.digest();
+                String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+                account.setPassword(myHash);
+                accountRepository.save(account);
+            }
         }catch (Exception ex){
             return 0;
         }
@@ -146,6 +149,7 @@ public class AccountService {
         return 1;
     }
     public Account getAccountById(Integer id){
+
         return accountRepository.findById(id).get();
     }
 
