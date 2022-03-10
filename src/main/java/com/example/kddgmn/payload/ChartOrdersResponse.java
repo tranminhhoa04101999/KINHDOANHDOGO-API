@@ -9,6 +9,11 @@ public class ChartOrdersResponse {
     public ChartOrdersResponse() {
     }
 
+    public ChartOrdersResponse(Date date, int quantity) {
+        this.date = date;
+        this.quantity = quantity;
+    }
+
     public Date getDate() {
         return date;
     }

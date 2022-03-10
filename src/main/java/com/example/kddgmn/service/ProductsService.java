@@ -1,15 +1,13 @@
 package com.example.kddgmn.service;
 
-import com.example.kddgmn.model.Discount;
-import com.example.kddgmn.model.ImgProduct;
-import com.example.kddgmn.model.OrderItems;
-import com.example.kddgmn.model.Product;
+import com.example.kddgmn.model.*;
 import com.example.kddgmn.payload.CommonResponse;
 import com.example.kddgmn.payload.OrderItemProduct;
 import com.example.kddgmn.payload.PagedResponse;
 import com.example.kddgmn.payload.TopSaleResponse;
 import com.example.kddgmn.repository.ImgProductRepository;
 import com.example.kddgmn.repository.OrderItemsRepository;
+import com.example.kddgmn.repository.OrdersRepository;
 import com.example.kddgmn.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -34,6 +33,9 @@ public class ProductsService {
 
     @Autowired
     private ImgProductRepository imgProductRepository;
+
+    @Autowired
+    private OrdersRepository ordersRepository;
 
     public List<Product> getAll(){
         return productRepository.findAll();
@@ -247,6 +249,66 @@ public class ProductsService {
         });
         List<TopSaleResponse> topSaleResponseList1 = topSaleResponseList.subList(0,3);
         return topSaleResponseList1;
+    }
+
+    public List<TopSaleResponse> getTopSaleWithDate(Date begin,Date end){
+        List<Orders> ordersList = ordersRepository.findByBeginAndEndAndStatus6(begin, end);
+        List<TopSaleResponse> topSaleResponseList = new ArrayList<>();
+        List<OrderItems> orderItemProductList = new ArrayList<>();
+
+        for (int i = 0; i < ordersList.size(); i++) {
+            List<OrderItems> orderItems = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
+            for (int j = 0; j < orderItems.size(); j++) {
+                orderItemProductList.add(orderItems.get(j));
+            }
+        }
+
+        for (int i = 0; i < orderItemProductList.size(); i++) {
+            Product product = productRepository.findById(orderItemProductList.get(i).getProduct().getIdProduct()).get();
+            List<ImgProduct> imgProductList = imgProductRepository.getImgWithIdProd(product.getIdProduct());
+            if(topSaleResponseList.size() == 0){
+                double priceDiscount = 0;
+                if(product.getDiscount() != null){
+                    if(product.getDiscount().getIsActive() == 1){
+                        priceDiscount= product.getPrice() * (1-product.getDiscount().getPercent());
+                    }
+                }
+                TopSaleResponse topSaleResponse = new TopSaleResponse(product.getIdProduct(),product.getNameProduct(),product.getPrice(),priceDiscount
+                        ,orderItemProductList.get(i).getQuantity(),imgProductList.get(0).getImgURL());
+                topSaleResponseList.add(topSaleResponse);
+            }else{
+                for (int j = 0; j < topSaleResponseList.size(); j++) {
+                    if(topSaleResponseList.get(j).getIdProduct() == orderItemProductList.get(i).getProduct().getIdProduct()){
+                        TopSaleResponse topSaleResponse = topSaleResponseList.get(j);
+                        topSaleResponse.setQuantity(topSaleResponse.getQuantity() + orderItemProductList.get(i).getQuantity());
+                        topSaleResponseList.set(j,topSaleResponse);
+                    }
+
+                    if(j == topSaleResponseList.size() - 1){
+                        double priceDiscount = 0;
+                        if(product.getDiscount() != null){
+                            if(product.getDiscount().getIsActive() == 1){
+                                priceDiscount= product.getPrice() * (1 - product.getDiscount().getPercent());
+                            }
+                        }
+                        TopSaleResponse topSaleResponse = new TopSaleResponse(product.getIdProduct(),product.getNameProduct(),product.getPrice(),priceDiscount
+                                ,orderItemProductList.get(i).getQuantity(),imgProductList.get(0).getImgURL());
+                        topSaleResponseList.add(topSaleResponse);
+                        break;
+                    }
+
+                }
+            }
+        }
+        Collections.sort(topSaleResponseList, new Comparator<TopSaleResponse>() {
+            @Override
+            public int compare(TopSaleResponse o1, TopSaleResponse o2) {
+                return o1.getQuantity() > o2.getQuantity() ? -1 : 0;
+            }
+
+        });
+
+        return topSaleResponseList;
     }
     public int updateDiscountByListIdCate(List<Integer> idCateList,int idDiscount){
         try {

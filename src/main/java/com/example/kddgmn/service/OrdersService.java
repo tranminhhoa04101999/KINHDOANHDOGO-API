@@ -9,11 +9,14 @@ import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrdersService {
@@ -152,6 +155,41 @@ public class OrdersService {
                 orders.setStatus(status);
                 ordersRepository.save(orders);
             }
+            // khi xác nhận đơn hàng thì gửi mail thông báo
+            if(idStatus == 2){
+                Orders orders = ordersRepository.findById(idOrders).get();
+                final String fromEmail = "tmhoa111@gmail.com";
+                // Mat khai email cua ban
+                final String password = "eunhyukL1";
+                // dia chi email nguoi nhan
+                final String toEmail = orders.getCustomer().getAccount().getEmail();
+                final String subject = "TMH ĐỒ GỖ MỸ NGHỆ";
+
+                final String body = "Đơn hàng có mã " +orders.getIdOrder()+ " đặt bên shop đã được xác nhận";
+                Properties props = new Properties();
+                props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
+                props.put("mail.smtp.port", "587"); //TLS Port
+                props.put("mail.smtp.auth", "true"); //enable authentication
+                props.put("mail.smtp.starttls.enable", "true"); //enable
+                Authenticator auth = new Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(fromEmail, password);
+                    }
+                };
+                Session session = Session.getInstance(props, auth);
+                MimeMessage msg = new MimeMessage(session);
+                //set message headers
+                msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+                msg.addHeader("format", "flowed");
+                msg.addHeader("Content-Transfer-Encoding", "8bit");
+                msg.setFrom(new InternetAddress(fromEmail, "NoReply-JD"));
+                msg.setReplyTo(InternetAddress.parse(fromEmail, false));
+                msg.setSubject(subject, "UTF-8");
+                msg.setText(body, "UTF-8");
+                msg.setSentDate(new Date());
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+                Transport.send(msg);
+            }
 
         }catch (Exception ex){
             System.out.println(ex.getMessage());
@@ -230,6 +268,50 @@ public class OrdersService {
             return 0;
         }
         return 1;
+    }
+
+    public List<ChartTotalResponse> findBydateBeginAnddateEnd(Date dateBegin,Date dateEnd){
+        List<ChartTotalResponse> chartTotalResponseList = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findBydateBeginAnddateEnd(dateBegin, dateEnd);
+        Double totalEnd = 0.00;
+        Double totalBegin = 0.00;
+        for (int i = 0; i < ordersList.size(); i++) {
+            if(dateBegin.getDay() == ordersList.get(i).getDateCreate().getDay() && dateBegin.getMonth() == ordersList.get(i).getDateCreate().getMonth()
+            && dateBegin.getYear() == ordersList.get(i).getDateCreate().getDay()){
+               totalBegin += ordersList.get(i).getTotal();
+            }
+            totalEnd += ordersList.get(i).getTotal();
+        }
+
+        ChartTotalResponse chartTotalResponsebegin = new ChartTotalResponse(dateBegin,totalBegin);
+        chartTotalResponseList.add(chartTotalResponsebegin);
+
+        ChartTotalResponse chartTotalResponseEnd = new ChartTotalResponse(dateEnd,totalEnd);
+        chartTotalResponseList.add(chartTotalResponseEnd);
+
+        return chartTotalResponseList;
+    }
+    public List<ChartOrdersResponse> findBydateBeginAnddateEndAll(Date dateBegin, Date dateEnd){
+        List<ChartOrdersResponse> chartOrdersResponseList = new ArrayList<>();
+        List<Orders> ordersList = ordersRepository.findBydateBeginAnddateEndAll(dateBegin, dateEnd);
+        int quantityEnd = 0;
+        int quantityBegin = 0;
+        for (int i = 0; i < ordersList.size(); i++) {
+            if(dateBegin.getDay() == ordersList.get(i).getDateCreate().getDay() && dateBegin.getMonth() == ordersList.get(i).getDateCreate().getMonth()
+                    && dateBegin.getYear() == ordersList.get(i).getDateCreate().getDay()){
+                quantityBegin += 1;
+            }
+            quantityEnd += 1;
+        }
+
+        ChartOrdersResponse chartOrdersResponsebe = new ChartOrdersResponse(dateBegin,quantityBegin);
+        chartOrdersResponseList.add(chartOrdersResponsebe);
+
+        ChartOrdersResponse chartOrdersResponseen = new ChartOrdersResponse(dateEnd,quantityEnd);
+        chartOrdersResponseList.add(chartOrdersResponseen);
+
+
+        return chartOrdersResponseList;
     }
 
 }

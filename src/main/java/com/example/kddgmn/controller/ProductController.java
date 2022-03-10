@@ -9,6 +9,7 @@ import com.example.kddgmn.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -104,5 +105,10 @@ public class ProductController {
     @PostMapping("/updateDiscountNullByListIdCate")
     public int updateDiscountNullByListIdCate(@RequestBody List<Integer> idCateList){
         return productsService.updateDiscountNullByListIdCate(idCateList);
+    }
+
+    @GetMapping("/getTopSaleWithDate")
+    public List<TopSaleResponse> getTopSaleWithDate(@RequestParam("begin")Date begin,@RequestParam("end") Date end){
+        return productsService.getTopSaleWithDate(begin, end);
     }
 }

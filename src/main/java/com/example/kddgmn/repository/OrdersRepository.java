@@ -1,6 +1,7 @@
 package com.example.kddgmn.repository;
 
 import com.example.kddgmn.model.Orders;
+import org.hibernate.criterion.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,4 +34,13 @@ public interface OrdersRepository extends JpaRepository<Orders,Integer> {
 
     @Query("SELECT v.idOrders FROM Orders v WHERE v.customer.idCustomer= :idCustomer AND v.status.idStatus = 5")
     List<Integer> findIdByCustomerAndStatus5(@Param("idCustomer") int idCustomer);
+
+    @Query("SELECT v FROM Orders v WHERE v.dateCreate >= :dateBegin AND v.dateCreate <= :dateEnd AND v.status.idStatus = 5")
+    List<Orders> findBydateBeginAnddateEnd(@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd);
+
+    @Query("SELECT v FROM Orders v WHERE v.dateCreate >= :dateBegin AND v.dateCreate <= :dateEnd")
+    List<Orders> findBydateBeginAnddateEndAll(@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd);
+
+    @Query("SELECT v FROM Orders v WHERE v.dateCreate >= :dateBegin AND v.dateCreate <= :dateEnd AND v.status.idStatus != 6")
+    List<Orders> findByBeginAndEndAndStatus6(@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd);
 }

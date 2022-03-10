@@ -4,10 +4,12 @@ import com.example.kddgmn.model.Orders;
 import com.example.kddgmn.payload.ChartOrdersResponse;
 import com.example.kddgmn.payload.ChartTotalResponse;
 import com.example.kddgmn.payload.SearchOrderResponse;
+import com.example.kddgmn.payload.ThongKeTotalResponse;
 import com.example.kddgmn.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -52,5 +54,15 @@ public class OrderController {
     @PostMapping("/huyOrder")
     public  int huyOrder(@RequestParam("idOrder") int idOrder){
         return ordersService.huyOrder(idOrder);
+    }
+
+    @GetMapping("/getDataThongkeTotal")
+    public List<ChartTotalResponse> findBydateBeginAnddateEnd(@RequestParam("begin") Date begin, @RequestParam("end") Date end){
+        return ordersService.findBydateBeginAnddateEnd(begin, end);
+    }
+
+    @GetMapping("/getDataThongkeOrder")
+    public List<ChartOrdersResponse> findBydateBeginAnddateEndAll(@RequestParam("begin") Date begin, @RequestParam("end") Date end){
+        return  ordersService.findBydateBeginAnddateEndAll(begin, end);
     }
 }

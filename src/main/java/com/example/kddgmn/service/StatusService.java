@@ -13,7 +13,8 @@ public class StatusService {
     private StatusRepository statusRepository;
 
     public List<Status> getAll(){
-        return  statusRepository.findAll();
+        return  statusRepository.getAllCustom();
     }
+
 
 }
