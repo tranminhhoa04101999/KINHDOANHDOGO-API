@@ -39,12 +39,14 @@ public class ProductController {
         return productsService.getProductwithid(idProduct);
     }
     @GetMapping("/allProductPage")
-    public PagedResponse<Product> getAllPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
-        return productsService.getAllProductPage(page,size);
+    public PagedResponse<Product> getAllPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size
+            ,@RequestParam("priceBegin") double priceBegin,@RequestParam("priceEnd") double priceEnd){
+        return productsService.getAllProductPage(page,size,priceBegin,priceEnd);
     }
     @GetMapping("/findWithIdCategoryPage")
-    public PagedResponse<Product> findWithIdCategoryPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size,@RequestParam("idCategory") Integer idCategory){
-        return productsService.findWithIdCategoryPage(page,size,idCategory);
+    public PagedResponse<Product> findWithIdCategoryPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size,@RequestParam("idCategory") Integer idCategory
+            ,@RequestParam("priceBegin") double priceBegin,@RequestParam("priceEnd") double priceEnd){
+        return productsService.findWithIdCategoryPage(page,size,idCategory,priceBegin,priceEnd);
     }
     @GetMapping("/allproductby")
     public List<Product> findByIdCategory(@RequestParam("idCategory") Integer idCategory){
@@ -77,16 +79,18 @@ public class ProductController {
     }
 
     @GetMapping("/findByHaveDiscountPage")
-    public PagedResponse<Product> findByHaveDiscount(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
-        return productsService.findByHaveDiscountPage(page,size);
+    public PagedResponse<Product> findByHaveDiscount(@RequestParam("page") Integer page, @RequestParam("size") Integer size
+            ,@RequestParam("priceBegin") double priceBegin,@RequestParam("priceEnd") double priceEnd){
+        return productsService.findByHaveDiscountPage(page,size,priceBegin,priceEnd);
     }
     @GetMapping("/findByNamePage")
     public PagedResponse<Product> findByNamePage(@RequestParam("page") Integer page, @RequestParam("size") Integer size,@RequestParam("nameProduct") String name){
         return productsService.findByNamePage(page,size,name);
     }
     @GetMapping("/findByNewOneWeekPage")
-    public PagedResponse<Product> findByNewOneWeekPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size){
-        return productsService.findByNewOneWeekPage(page,size);
+    public PagedResponse<Product> findByNewOneWeekPage(@RequestParam("page") Integer page, @RequestParam("size") Integer size
+            ,@RequestParam("priceBegin") double priceBegin,@RequestParam("priceEnd") double priceEnd){
+        return productsService.findByNewOneWeekPage(page,size,priceBegin,priceEnd);
     }
     @PostMapping("/checkQuantityProduct")
     public List<CommonResponse> checkQuantity(@RequestBody List<OrderItemProduct> orderItemProducts){

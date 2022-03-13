@@ -64,9 +64,9 @@ public class ProductsService {
         return productRepository.findIdMax();
    }
 
-    public PagedResponse<Product> getAllProductPage(Integer page, Integer size){
+    public PagedResponse<Product> getAllProductPage(Integer page, Integer size,double priceBegin,double priceEnd){
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC,"price");
-        Page<Product> products = productRepository.findAllWithPage(pageable);
+        Page<Product> products = productRepository.findAllWithPage(pageable,priceBegin,priceEnd);
 
         if (products.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), products.getNumber(), products.getSize(),
@@ -74,13 +74,12 @@ public class ProductsService {
         }
         List<Product> productRes = products.getContent();
 
-
         return new PagedResponse<>(productRes, products.getNumber(), products.getSize(), products.getTotalElements(),
                 products.getTotalPages(), products.isLast());
     }
-    public PagedResponse<Product> findWithIdCategoryPage(Integer page, Integer size, Integer idCategory){
+    public PagedResponse<Product> findWithIdCategoryPage(Integer page, Integer size, Integer idCategory,double priceBegin,double priceEnd){
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC,"price");
-        Page<Product> products = productRepository.findWithIdCategoryPage(idCategory,pageable);
+        Page<Product> products = productRepository.findWithIdCategoryPage(idCategory,pageable,priceBegin,priceEnd);
 
         if (products.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), products.getNumber(), products.getSize(),
@@ -139,12 +138,12 @@ public class ProductsService {
         Date dateAdd = Date.from(dateNowSub.atStartOfDay(ZoneId.systemDefault()).toInstant());
         return productRepository.findByNewOneWeek(dateAdd);
     }
-    public PagedResponse<Product> findByNewOneWeekPage(Integer page,Integer size){
+    public PagedResponse<Product> findByNewOneWeekPage(Integer page,Integer size,double priceBegin,double priceEnd){
         LocalDate dateNowSub = LocalDate.now().minusDays(7); // ngày hiện tại trừ 7 ngày
         Date dateAdd = Date.from(dateNowSub.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC,"price");
-        Page<Product> products = productRepository.findByNewOneWeekPage(dateAdd,pageable);
+        Page<Product> products = productRepository.findByNewOneWeekPage(dateAdd,pageable,priceBegin,priceEnd);
 
         if (products.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), products.getNumber(), products.getSize(),
@@ -171,9 +170,9 @@ public class ProductsService {
         return new PagedResponse<>(productRes, products.getNumber(), products.getSize(), products.getTotalElements(),
                 products.getTotalPages(), products.isLast());
     }
-    public PagedResponse<Product> findByHaveDiscountPage(Integer page, Integer size){
+    public PagedResponse<Product> findByHaveDiscountPage(Integer page, Integer size,double priceBegin, double priceEnd){
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC,"price");
-        Page<Product> products = productRepository.findByHaveDiscountPage(pageable);
+        Page<Product> products = productRepository.findByHaveDiscountPage(pageable,priceBegin,priceEnd);
 
         if (products.getNumberOfElements() == 0) {
             return new PagedResponse<>(Collections.emptyList(), products.getNumber(), products.getSize(),

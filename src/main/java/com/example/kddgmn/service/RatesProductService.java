@@ -89,7 +89,8 @@ public class RatesProductService {
             int years = date.getYear() - ratesProductList.get(i).getOrders().getDateEnd().getYear();
             int months = date.getMonth() - ratesProductList.get(i).getOrders().getDateEnd().getMonth();
             int days = date.getDay() - ratesProductList.get(i).getOrders().getDateEnd().getDay();
-            timeUsed = timeUsed + " "+years+" năm, "+months+" tháng, "+days+" ngày";
+            long sss= date.getTime() - ratesProductList.get(i).getOrders().getDateEnd().getTime();
+            timeUsed = timeUsed + sss/86400000+" ngày";
             ratesProductResponse.setTimeUsed(timeUsed);
             ratesProductResponseList.add(ratesProductResponse);
             if(ratesProductList.get(i).getPointRate() == 1){

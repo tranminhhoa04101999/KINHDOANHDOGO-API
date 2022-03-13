@@ -15,11 +15,11 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("SELECT max(v.idProduct) FROM Product v")
     Integer findIdMax();
-    @Query("SELECT v FROM Product v WHERE v.isActive = 1")
-    Page<Product> findAllWithPage (Pageable pageable);
+    @Query("SELECT v FROM Product v WHERE v.isActive = 1 AND v.price >= :priceBegin AND v.price <= :priceEnd")
+    Page<Product> findAllWithPage (Pageable pageable,@Param("priceBegin") double priceBegin,@Param("priceEnd") double priceEnd);
 
-    @Query("SELECT v FROM Product v WHERE v.category.idCategory= :idCategory AND v.isActive = 1")
-    Page<Product> findWithIdCategoryPage (@Param("idCategory") Integer idCategory,Pageable pageable);
+    @Query("SELECT v FROM Product v WHERE v.category.idCategory= :idCategory AND v.isActive = 1 AND v.price >= :priceBegin AND v.price <= :priceEnd")
+    Page<Product> findWithIdCategoryPage (@Param("idCategory") Integer idCategory,Pageable pageable,@Param("priceBegin") double priceBegin,@Param("priceEnd") double priceEnd);
 
     @Query("SELECT v FROM Product v WHERE v.category.idCategory= :idCategory")
     List<Product> findByIdcategory(@Param("idCategory") Integer idCategory);
@@ -30,14 +30,14 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("SELECT v FROM Product v WHERE v.addDate> :date")
     List<Product> findByNewOneWeek(@Param("date") Date date);
 
-    @Query("SELECT v FROM Product v WHERE v.addDate> :date AND v.isActive = 1")
-    Page<Product> findByNewOneWeekPage(@Param("date") Date date,Pageable pageable);
+    @Query("SELECT v FROM Product v WHERE v.addDate> :date AND v.isActive = 1 AND v.price >= :priceBegin AND v.price <= :priceEnd")
+    Page<Product> findByNewOneWeekPage(@Param("date") Date date,Pageable pageable,@Param("priceBegin") double priceBegin,@Param("priceEnd") double priceEnd);
 
     @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0 AND v.discount.isActive = 1")
     List<Product> findByHaveDiscount();
 
-    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0 AND v.discount.isActive = 1 AND v.isActive = 1")
-    Page<Product> findByHaveDiscountPage(Pageable pageable);
+    @Query("SELECT v FROM Product v WHERE v.discount.idDiscount > 0 AND v.discount.isActive = 1 AND v.isActive = 1 AND v.price >= :priceBegin AND v.price <= :priceEnd")
+    Page<Product> findByHaveDiscountPage(Pageable pageable,@Param("priceBegin") double priceBegin,@Param("priceEnd") double priceEnd);
 
     @Query("SELECT v FROM Product v WHERE v.nameProduct LIKE %:nameProduct% AND v.isActive = 1")
     Page<Product> findByNamePage(@Param("nameProduct") String nameProduct,Pageable pageable);
