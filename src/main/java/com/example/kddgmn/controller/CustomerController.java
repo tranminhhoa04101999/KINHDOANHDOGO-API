@@ -23,6 +23,9 @@ public class CustomerController {
         return customerService.save(customer);
     }
 
+    @PostMapping("/updateInfCustomer")
+    public int updateInfo(@RequestBody Customer customer){return customerService.updateInfo(customer);}
+
     @GetMapping("/findCustomerByIdAccount")
     public Customer findByIdAccount(@RequestParam("idAccount") Integer idAccount){
         return customerService.findByIdAccount(idAccount);

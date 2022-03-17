@@ -256,9 +256,14 @@ public class OrdersService {
 
         for (int i = 0; i < ordersList.size(); i++) {
             ChartTotalResponse chartTotalResponse = new ChartTotalResponse();
-                for (int j = 0; j < ChartTotalResponses.size(); j++) {
+            List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
+            Double total = 0.0;
+            for (int k = 0; k < orderItemsList.size(); k++) {
+                total += orderItemsList.get(k).getPriceCurrent() * orderItemsList.get(k).getQuantity();
+            }
+            for (int j = 0; j < ChartTotalResponses.size(); j++) {
                     if(ChartTotalResponses.get(j).getDate().getMonth() == ordersList.get(i).getDateCreate().getMonth()){
-                        chartTotalResponse.setTotal(ChartTotalResponses.get(j).getTotal() );
+                        chartTotalResponse.setTotal(total);
                         chartTotalResponse.setDate(ChartTotalResponses.get(j).getDate());
                         ChartTotalResponses.set(j,chartTotalResponse);
                     }
@@ -282,11 +287,17 @@ public class OrdersService {
         Double totalEnd = 0.00;
         Double totalBegin = 0.00;
         for (int i = 0; i < ordersList.size(); i++) {
+            List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
+            Double total = 0.0;
+            for (int j = 0; j < orderItemsList.size(); j++) {
+                var item = orderItemsList.get(j);
+                total += item.getPriceCurrent() * item.getQuantity();
+            }
             if(dateBegin.getDay() == ordersList.get(i).getDateCreate().getDay() && dateBegin.getMonth() == ordersList.get(i).getDateCreate().getMonth()
             && dateBegin.getYear() == ordersList.get(i).getDateCreate().getDay()){
-
+                totalBegin = total;
             }
-
+            totalEnd = total;
         }
 
         ChartTotalResponse chartTotalResponsebegin = new ChartTotalResponse(dateBegin,totalBegin);

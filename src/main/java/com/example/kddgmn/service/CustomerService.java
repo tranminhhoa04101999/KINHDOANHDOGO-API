@@ -36,6 +36,16 @@ public class CustomerService {
         }
         return 1;
     }
+
+    public int updateInfo(Customer customer){
+        try{
+            customerRepository.save(customer);
+        }catch (Exception ex){
+            return 0;
+        }
+        return 1;
+    }
+
     public Customer findByIdAccount(Integer idAccount){
         return customerRepository.findByIdAccount(idAccount);
     }
