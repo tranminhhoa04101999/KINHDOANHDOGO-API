@@ -2,6 +2,7 @@ package com.example.kddgmn.service;
 
 import com.example.kddgmn.model.Orders;
 import com.example.kddgmn.model.Product;
+import com.example.kddgmn.model.RateProductId;
 import com.example.kddgmn.model.RatesProduct;
 import com.example.kddgmn.payload.*;
 import com.example.kddgmn.repository.OrdersRepository;
@@ -44,8 +45,13 @@ public class RatesProductService {
 
                 Product product = new Product(ratesProductReciveList.get(i).getIdProduct());
                 Orders orders =  new Orders(ratesProductReciveList.get(i).getIdOrder());
-                RatesProduct ratesProduct = new RatesProduct(product,orders,ratesProductReciveList.get(i).getDescRate()
-                        ,ratesProductReciveList.get(i).getPointRate());
+                RatesProduct ratesProduct = new RatesProduct();
+                RateProductId rateProductId = new RateProductId(ratesProductReciveList.get(i).getIdProduct(),ratesProductReciveList.get(i).getIdOrder());
+                ratesProduct.setIdRateProduct(rateProductId);
+                ratesProduct.setProduct(product);
+                ratesProduct.setOrders(orders);
+                ratesProduct.setDescRate(ratesProductReciveList.get(i).getDescRate());
+                ratesProduct.setPointRate(ratesProductReciveList.get(i).getPointRate());
                 ratesProductList.add(ratesProduct);
             }
 

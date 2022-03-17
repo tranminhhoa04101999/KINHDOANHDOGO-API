@@ -3,49 +3,35 @@ package com.example.kddgmn.model;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "orderitems")
 public class OrderItems {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idorderitems")
-    private Integer idOrderItems;
+    @EmbeddedId
+    private OrderItemsId idOrderItems;
+
     private Integer quantity;
 
     @Column(name= "pricecurrent")
     private Double priceCurrent;
 
-    @ManyToOne
-    @JoinColumn(name = "idorders")
-    private Orders orders;
-
-    @ManyToOne
-    @JoinColumn(name = "idproduct")
-    private Product product;
 
     public OrderItems() {
     }
 
-    public OrderItems(Integer quantity, Double priceCurrent, Orders orders, Product product) {
-        this.quantity = quantity;
-        this.priceCurrent = priceCurrent;
-        this.orders = orders;
-        this.product = product;
-    }
+    @ManyToOne
+    @JoinColumn(name = "idorders", referencedColumnName = "idorders" ,insertable = false,updatable = false )
+    private Orders orders;
 
-    public OrderItems(Integer idOrderItems, Integer quantity, Double priceCurrent, Orders orders, Product product) {
-        this.idOrderItems = idOrderItems;
-        this.quantity = quantity;
-        this.priceCurrent = priceCurrent;
-        this.orders = orders;
-        this.product = product;
-    }
+    @ManyToOne
+    @JoinColumn(name = "idproduct", referencedColumnName = "idproduct" ,insertable = false,updatable = false )
+    private Product product;
 
-    public Integer getIdOrderItems() {
+    public OrderItemsId getIdOrderItems() {
         return idOrderItems;
     }
 
-    public void setIdOrderItems(Integer idOrderItems) {
+    public void setIdOrderItems(OrderItemsId idOrderItems) {
         this.idOrderItems = idOrderItems;
     }
 
@@ -79,16 +65,5 @@ public class OrderItems {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderItems{" +
-                "idOrderItems=" + idOrderItems +
-                ", quantity=" + quantity +
-                ", priceCurrent=" + priceCurrent +
-                ", orders=" + orders +
-                ", product=" + product +
-                '}';
     }
 }

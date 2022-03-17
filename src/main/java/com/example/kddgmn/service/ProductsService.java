@@ -132,6 +132,7 @@ public class ProductsService {
             return 0;
         }
         return 1;
+        //êccec
     }
     public List<Product> findByNewOneWeek(){
         LocalDate dateNowSub = LocalDate.now().minusDays(7); // ngày hiện tại trừ 7 ngày
@@ -246,7 +247,11 @@ public class ProductsService {
             }
 
         });
-        List<TopSaleResponse> topSaleResponseList1 = topSaleResponseList.subList(0,3);
+        List<TopSaleResponse> topSaleResponseList1 = topSaleResponseList;
+
+        if(topSaleResponseList.size() > 3 ){
+            topSaleResponseList1 = topSaleResponseList.subList(0,3);
+        }
         return topSaleResponseList1;
     }
 

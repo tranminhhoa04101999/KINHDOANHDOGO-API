@@ -72,11 +72,12 @@ public class AccountService {
             {
                 employee.setName("");
                 employee.setPhone("");
-                employee.setAccount(account);
                 employee.setAddress("");
                 employee.setDateBegin(new Date());
                 employee.setIsWorking(account.getIsActive());
                 accountRepository.save(account);
+                Integer idMax = accountRepository.findIdMax();
+                employee.setIdAccount(idMax);
                 employeeRepository.save(employee);
             }
             if(account.getRole().getIdRole() == 3){

@@ -13,7 +13,6 @@ public class Orders {
     private String phone;
     private String address;
     private String note;
-    private Double total;
     @Column(name = "datecreate")
     private Date dateCreate;
     @Column(name = "datemodified")
@@ -40,12 +39,11 @@ public class Orders {
         this.idOrders = idOrders;
     }
 
-    public Orders(Integer idOrders, String phone, String address, String note, Double total, Date dateCreate, Date dateModified, Date dateEnd, Status status, Customer customer, Employee employee) {
+    public Orders(Integer idOrders, String phone, String address, String note, Date dateCreate, Date dateModified, Date dateEnd, Status status, Customer customer, Employee employee) {
         this.idOrders = idOrders;
         this.phone = phone;
         this.address = address;
         this.note = note;
-        this.total = total;
         this.dateCreate = dateCreate;
         this.dateModified = dateModified;
         this.dateEnd = dateEnd;
@@ -84,14 +82,6 @@ public class Orders {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
     }
 
     public Date getDateCreate() {
@@ -142,20 +132,4 @@ public class Orders {
         this.employee = employee;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "idOrder=" + idOrders +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", note='" + note + '\'' +
-                ", total=" + total +
-                ", dateCreate=" + dateCreate +
-                ", dateModified=" + dateModified +
-                ", dateEnd=" + dateEnd +
-                ", status=" + status +
-                ", customer=" + customer +
-                ", employee=" + employee +
-                '}';
-    }
 }

@@ -258,7 +258,7 @@ public class OrdersService {
             ChartTotalResponse chartTotalResponse = new ChartTotalResponse();
                 for (int j = 0; j < ChartTotalResponses.size(); j++) {
                     if(ChartTotalResponses.get(j).getDate().getMonth() == ordersList.get(i).getDateCreate().getMonth()){
-                        chartTotalResponse.setTotal(ChartTotalResponses.get(j).getTotal() + ordersList.get(i).getTotal());
+                        chartTotalResponse.setTotal(ChartTotalResponses.get(j).getTotal() );
                         chartTotalResponse.setDate(ChartTotalResponses.get(j).getDate());
                         ChartTotalResponses.set(j,chartTotalResponse);
                     }
@@ -284,9 +284,9 @@ public class OrdersService {
         for (int i = 0; i < ordersList.size(); i++) {
             if(dateBegin.getDay() == ordersList.get(i).getDateCreate().getDay() && dateBegin.getMonth() == ordersList.get(i).getDateCreate().getMonth()
             && dateBegin.getYear() == ordersList.get(i).getDateCreate().getDay()){
-               totalBegin += ordersList.get(i).getTotal();
+
             }
-            totalEnd += ordersList.get(i).getTotal();
+
         }
 
         ChartTotalResponse chartTotalResponsebegin = new ChartTotalResponse(dateBegin,totalBegin);

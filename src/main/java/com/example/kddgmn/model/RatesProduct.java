@@ -5,17 +5,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ratesproduct")
 public class RatesProduct {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idratesproduct")
-    private Integer idRateProduct;
+    @EmbeddedId
+    private RateProductId idRateProduct;
 
     @ManyToOne
-    @JoinColumn(name = "idproduct")
+    @JoinColumn(name = "idproduct", referencedColumnName = "idproduct",updatable = false,insertable = false)
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "idorders")
+    @JoinColumn(name = "idorders", referencedColumnName = "idorders",updatable = false,insertable = false)
     private Orders orders;
 
     @Column(name = "descrate")
@@ -27,30 +25,11 @@ public class RatesProduct {
     public RatesProduct() {
     }
 
-    public RatesProduct(Integer idRateProduct) {
-        this.idRateProduct = idRateProduct;
-    }
-
-    public RatesProduct(Integer idRateProduct, Product product, Orders orders, String descRate, float pointRate) {
-        this.idRateProduct = idRateProduct;
-        this.product = product;
-        this.orders = orders;
-        this.descRate = descRate;
-        this.pointRate = pointRate;
-    }
-
-    public RatesProduct(Product product, Orders orders, String descRate, float pointRate) {
-        this.product = product;
-        this.orders = orders;
-        this.descRate = descRate;
-        this.pointRate = pointRate;
-    }
-
-    public Integer getIdRateProduct() {
+    public RateProductId getIdRateProduct() {
         return idRateProduct;
     }
 
-    public void setIdRateProduct(Integer idRateProduct) {
+    public void setIdRateProduct(RateProductId idRateProduct) {
         this.idRateProduct = idRateProduct;
     }
 
@@ -84,16 +63,5 @@ public class RatesProduct {
 
     public void setPointRate(float pointRate) {
         this.pointRate = pointRate;
-    }
-
-    @Override
-    public String toString() {
-        return "RateProduct{" +
-                "idRateProduct=" + idRateProduct +
-                ", product=" + product +
-                ", orders=" + orders +
-                ", descRate='" + descRate + '\'' +
-                ", pointRate=" + pointRate +
-                '}';
     }
 }

@@ -8,9 +8,8 @@ import java.util.Date;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idemployee")
-    private Integer idEmployee;
+    @Column(name = "idaccount")
+    private Integer idAccount;
 
     private String name;
     private String phone;
@@ -23,35 +22,19 @@ public class Employee {
     @Column(name = "isworking")
     private Integer isWorking;
 
-    @ManyToOne
-    @JoinColumn(name = "idaccount")
-    private Account account;
-
     public Employee() {
     }
 
-    public Employee(Integer idEmployee) {
-        this.idEmployee = idEmployee;
+    public Employee(Integer idAccount) {
+        this.idAccount = idAccount;
     }
 
-    public Employee(Integer idEmployee, String name, String phone, String address, Date dateBegin, Date dateEnd, Integer isWorking, Account account) {
-        this.idEmployee = idEmployee;
-        this.name = name;
-        this.phone = phone;
-        this.address = address;
-
-        this.dateBegin = dateBegin;
-        this.dateEnd = dateEnd;
-        this.isWorking = isWorking;
-        this.account = account;
+    public Integer getIdAccount() {
+        return idAccount;
     }
 
-    public Integer getIdEmployee() {
-        return idEmployee;
-    }
-
-    public void setIdEmployee(Integer idEmployee) {
-        this.idEmployee = idEmployee;
+    public void setIdAccount(Integer idAccount) {
+        this.idAccount = idAccount;
     }
 
     public String getName() {
@@ -78,7 +61,6 @@ public class Employee {
         this.address = address;
     }
 
-
     public Date getDateBegin() {
         return dateBegin;
     }
@@ -103,25 +85,16 @@ public class Employee {
         this.isWorking = isWorking;
     }
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
-                "idEmployee=" + idEmployee +
+                "idAccount=" + idAccount +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", dateBegin=" + dateBegin +
                 ", dateEnd=" + dateEnd +
                 ", isWorking=" + isWorking +
-                ", account=" + account +
                 '}';
     }
 }

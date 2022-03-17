@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
-    @Query("SELECT v FROM Employee v WHERE v.account.idAccount= :idAccount")
+    @Query("SELECT v FROM Employee v WHERE v.idAccount= :idAccount")
     List<Employee> findByIdAccount (@Param("idAccount") int idAccount);
 }

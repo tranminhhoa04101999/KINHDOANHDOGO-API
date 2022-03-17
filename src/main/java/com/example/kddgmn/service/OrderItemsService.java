@@ -1,6 +1,7 @@
 package com.example.kddgmn.service;
 
 import com.example.kddgmn.model.OrderItems;
+import com.example.kddgmn.model.OrderItemsId;
 import com.example.kddgmn.model.Orders;
 import com.example.kddgmn.model.Product;
 import com.example.kddgmn.payload.OrderItemProduct;
@@ -33,6 +34,10 @@ public class OrderItemsService {
                 OrderItems orderItems = new OrderItems();
                 Orders orders = new Orders(idMaxOrders);
                 Product product = new Product(orderItemProduct.get(i).getIdProduct());
+                OrderItemsId orderItemsId = new OrderItemsId();
+                orderItemsId.setIdOrders(idMaxOrders);
+                orderItemsId.setIdProduct(orderItemProduct.get(i).getIdProduct());
+                orderItems.setIdOrderItems(orderItemsId);
                 orderItems.setOrders(orders);
                 orderItems.setProduct(product);
                 orderItems.setQuantity(orderItemProduct.get(i).getQuantity());
