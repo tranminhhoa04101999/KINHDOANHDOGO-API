@@ -36,17 +36,18 @@ public class OrdersService {
     private OrderItemsRepository orderItemsRepository;
 
     @Autowired
-    private  ImgProductService imgProductService;
+    private ImgProductService imgProductService;
 
     @Autowired
     private CustomerRepository customerRepository;
 
-    public List<Orders> getAll(){
+    public List<Orders> getAll() {
         return ordersRepository.findAll();
     }
-    public Integer saveOrder(Orders orders,String name){
-        try{
-            if(orders.getCustomer().getIdCustomer() == 0){
+
+    public Integer saveOrder(Orders orders, String name) {
+        try {
+            if (orders.getCustomer().getIdCustomer() == 0) {
                 Customer customer = new Customer();
                 customer.setPhone(orders.getPhone());
                 customer.setName(name);
@@ -54,7 +55,7 @@ public class OrdersService {
                 customer.setDateCreate(new Date());
                 customer.setAccount(null);
                 int check = customerService.saveWithNoAccount(customer);
-                if(check == 0){
+                if (check == 0) {
                     return 0;
                 }
                 int idMax = customerService.findMaxId();
@@ -62,19 +63,20 @@ public class OrdersService {
                 orders.setCustomer(customer1);
 
                 ordersRepository.save(orders);
-            }
-            else{
+            } else {
                 ordersRepository.save(orders);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0;
         }
         return 1;
     }
-    public Integer findMaxId(){
+
+    public Integer findMaxId() {
         return ordersRepository.findIdMax();
     }
-    public List<SearchOrderResponse> searchOrderByIdOrPhone(int idOrders, int idStatus, String phone){
+
+    public List<SearchOrderResponse> searchOrderByIdOrPhone(int idOrders, int idStatus, String phone) {
         List<Orders> orders = ordersRepository.searchOrderByIdOrPhone(idStatus, idOrders, phone);
         List<SearchOrderResponse> searchOrderResponses = new ArrayList<>();
 
@@ -88,13 +90,13 @@ public class OrdersService {
                 Product product = orderitems.get(j).getProduct();
                 List<ImgProductResponse> imgProductResponses = imgProductService.getImgByIdProd(product.getIdProduct());
                 String imgProd = "";
-                if(imgProductResponses.size()==0){
+                if (imgProductResponses.size() == 0) {
                     imgProd = "defaultImage";
-                }else{
+                } else {
                     imgProd = imgProductResponses.get(0).getImgURL();
                 }
-                ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(),orderitems.get(j).getPriceCurrent()
-                        ,product.getColor(),orderitems.get(j).getQuantity(),imgProd);
+                ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(), orderitems.get(j).getPriceCurrent()
+                        , product.getColor(), orderitems.get(j).getQuantity(), imgProd);
                 productSearchResponses.add(productSearchResponse);
             }
 
@@ -107,12 +109,12 @@ public class OrdersService {
         return searchOrderResponses;
     }
 
-    public List<SearchOrderResponse> searchOrderByIdAccount(int idAccount){
+    public List<SearchOrderResponse> searchOrderByIdAccount(int idAccount) {
         // lấy ra customer
         Customer customer = customerRepository.findByIdAccount(idAccount);
         List<SearchOrderResponse> searchOrderResponses = new ArrayList<>();
 
-        if(customer == null){
+        if (customer == null) {
             return searchOrderResponses;
         }
         List<Orders> ordersList = ordersRepository.findByIdCustomer(customer.getIdCustomer());
@@ -125,8 +127,8 @@ public class OrdersService {
             for (int j = 0; j < orderitems.size(); j++) {
                 Product product = orderitems.get(j).getProduct();
                 List<ImgProductResponse> imgProductResponses = imgProductService.getImgByIdProd(product.getIdProduct());
-                ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(),orderitems.get(j).getPriceCurrent()
-                        ,product.getColor(),orderitems.get(j).getQuantity(),imgProductResponses.get(0).getImgURL());
+                ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(), orderitems.get(j).getPriceCurrent()
+                        , product.getColor(), orderitems.get(j).getQuantity(), imgProductResponses.get(0).getImgURL());
                 productSearchResponses.add(productSearchResponse);
             }
 
@@ -139,9 +141,9 @@ public class OrdersService {
         return searchOrderResponses;
     }
 
-    public Integer UpdateStatusByidStatusAndId(int idStatus,int idOrders,int idEmployee){
+    public Integer UpdateStatusByidStatusAndId(int idStatus, int idOrders, int idEmployee) {
         try {
-            if(idStatus >= 5){
+            if (idStatus >= 5) {
                 Date date = new Date();
                 Orders orders = ordersRepository.findById(idOrders).get();
                 orders.setDateEnd(date);
@@ -150,8 +152,7 @@ public class OrdersService {
                 Status status = new Status(idStatus);
                 orders.setStatus(status);
                 ordersRepository.save(orders);
-            }
-            else{
+            } else {
                 Date date = new Date();
                 Orders orders = ordersRepository.findById(idOrders).get();
                 orders.setDateModified(date);
@@ -162,7 +163,7 @@ public class OrdersService {
                 ordersRepository.save(orders);
             }
             // khi xác nhận đơn hàng thì gửi mail thông báo
-            if(idStatus == 2){
+            if (idStatus == 2) {
                 Orders orders = ordersRepository.findById(idOrders).get();
                 final String fromEmail = "tmhoa111@gmail.com";
                 // Mat khai email cua ban
@@ -171,7 +172,7 @@ public class OrdersService {
                 final String toEmail = orders.getCustomer().getAccount().getEmail();
                 final String subject = "TMH ĐỒ GỖ MỸ NGHỆ";
 
-                final String body = "Đơn hàng có mã " +orders.getIdOrder()+ " đặt bên shop đã được xác nhận";
+                final String body = "Đơn hàng có mã " + orders.getIdOrder() + " đặt bên shop đã được xác nhận";
                 Properties props = new Properties();
                 props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
                 props.put("mail.smtp.port", "587"); //TLS Port
@@ -197,13 +198,14 @@ public class OrdersService {
                 Transport.send(msg);
             }
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return 0;
         }
         return 1;
     }
-    public List<ChartOrdersResponse> getDataChartOrders (){
+
+    public List<ChartOrdersResponse> getDataChartOrders() {
         LocalDate dateNowSub = LocalDate.now().minusDays(6); // ngày hiện tại trừ 7 ngày
         Date dateAdd = Date.from(dateNowSub.atStartOfDay(ZoneId.systemDefault()).toInstant());
         List<ChartOrdersResponse> chartOrdersResponses = new ArrayList<>();
@@ -211,20 +213,19 @@ public class OrdersService {
 
         for (int i = 0; i < ordersList.size(); i++) {
             ChartOrdersResponse chartOrdersResponse = new ChartOrdersResponse();
-            if(chartOrdersResponses.size() == 0){
+            if (chartOrdersResponses.size() == 0) {
                 chartOrdersResponse.setDate(ordersList.get(i).getDateCreate());
                 chartOrdersResponse.setQuantity(1);
                 chartOrdersResponses.add(chartOrdersResponse);
 
-            }else{
+            } else {
                 for (int j = 0; j < chartOrdersResponses.size(); j++) {
-                    if(chartOrdersResponses.get(j).getDate().equals(ordersList.get(i).getDateCreate())){
-                        chartOrdersResponse.setQuantity(chartOrdersResponses.get(j).getQuantity() +1);
+                    if (chartOrdersResponses.get(j).getDate().equals(ordersList.get(i).getDateCreate())) {
+                        chartOrdersResponse.setQuantity(chartOrdersResponses.get(j).getQuantity() + 1);
                         chartOrdersResponse.setDate(chartOrdersResponses.get(j).getDate());
-                        chartOrdersResponses.set(j,chartOrdersResponse);
-                    }
-                    else {
-                        if(j == chartOrdersResponses.size() - 1){
+                        chartOrdersResponses.set(j, chartOrdersResponse);
+                    } else {
+                        if (j == chartOrdersResponses.size() - 1) {
                             chartOrdersResponse.setDate(ordersList.get(i).getDateCreate());
                             chartOrdersResponse.setQuantity(1);
                             chartOrdersResponses.add(chartOrdersResponse);
@@ -234,9 +235,10 @@ public class OrdersService {
                 }
             }
         }
-        return  chartOrdersResponses;
+        return chartOrdersResponses;
     }
-    public List<ChartTotalResponse> getDataChartTotal (){
+
+    public List<ChartTotalResponse> getDataChartTotal() {
         LocalDate dateNowSub = LocalDate.now();
         Date date = Date.from(dateNowSub.atStartOfDay(ZoneId.systemDefault()).toInstant());
         List<ChartTotalResponse> ChartTotalResponses = new ArrayList<>();
@@ -254,77 +256,104 @@ public class OrdersService {
             ChartTotalResponses.add(chartTotalResponse);
         }
 
-        for (int i = 0; i < ordersList.size(); i++) {
+        for (int i = 0; i < ChartTotalResponses.size(); i++) {
             ChartTotalResponse chartTotalResponse = new ChartTotalResponse();
-            List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
             Double total = 0.0;
-            for (int k = 0; k < orderItemsList.size(); k++) {
-                total += orderItemsList.get(k).getPriceCurrent() * orderItemsList.get(k).getQuantity();
-            }
-            for (int j = 0; j < ChartTotalResponses.size(); j++) {
-                    if(ChartTotalResponses.get(j).getDate().getMonth() == ordersList.get(i).getDateCreate().getMonth()){
-                        chartTotalResponse.setTotal(total);
-                        chartTotalResponse.setDate(ChartTotalResponses.get(j).getDate());
-                        ChartTotalResponses.set(j,chartTotalResponse);
-                    }
 
+            for (int j = 0; j < ordersList.size(); j++) {
+                if (ChartTotalResponses.get(i).getDate().getMonth() == ordersList.get(j).getDateCreate().getMonth()) {
+                    List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(j).getIdOrder());
+                    for (int k = 0; k < orderItemsList.size(); k++) {
+                        total += orderItemsList.get(k).getPriceCurrent() * orderItemsList.get(k).getQuantity();
+                    }
+                }
             }
+            chartTotalResponse.setTotal(total);
+            chartTotalResponse.setDate(ChartTotalResponses.get(i).getDate());
+            ChartTotalResponses.set(i, chartTotalResponse);
+
         }
-        return  ChartTotalResponses;
+
+//        for (int i = 0; i < ordersList.size(); i++) {
+//            ChartTotalResponse chartTotalResponse = new ChartTotalResponse();
+//
+//            for (int j = 0; j < ChartTotalResponses.size(); j++) {
+//                    if(ChartTotalResponses.get(j).getDate().getMonth() == ordersList.get(i).getDateCreate().getMonth()){
+//                        List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
+//
+//                        for (int k = 0; k < orderItemsList.size(); k++) {
+//                            total += orderItemsList.get(k).getPriceCurrent() * orderItemsList.get(k).getQuantity();
+//                        }
+//
+//                        chartTotalResponse.setTotal(total);
+//                        chartTotalResponse.setDate(ChartTotalResponses.get(j).getDate());
+//                        ChartTotalResponses.set(j,chartTotalResponse);
+//
+//                    }
+//
+//            }
+//            total =0.0;
+//        }
+        return ChartTotalResponses;
     }
-    public int huyOrder(int idOrder){
-        try{
-            ordersRepository.UpdateStatusByidStatusAndId(6,idOrder);
-        }catch (Exception ex){
+
+    public int huyOrder(int idOrder) {
+        try {
+            ordersRepository.UpdateStatusByidStatusAndId(6, idOrder);
+        } catch (Exception ex) {
             return 0;
         }
         return 1;
     }
 
-    public List<ChartTotalResponse> findBydateBeginAnddateEnd(Date dateBegin,Date dateEnd){
+    public List<ChartTotalResponse> findBydateBeginAnddateEnd(Date dateBegin, Date dateEnd) {
         List<ChartTotalResponse> chartTotalResponseList = new ArrayList<>();
         List<Orders> ordersList = ordersRepository.findBydateBeginAnddateEnd(dateBegin, dateEnd);
         Double totalEnd = 0.00;
         Double totalBegin = 0.00;
+        Double total = 0.0;
+
         for (int i = 0; i < ordersList.size(); i++) {
+            double totalB =0.0;
             List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
-            Double total = 0.0;
             for (int j = 0; j < orderItemsList.size(); j++) {
                 var item = orderItemsList.get(j);
                 total += item.getPriceCurrent() * item.getQuantity();
+                totalB += item.getPriceCurrent() * item.getQuantity();
             }
-            if(dateBegin.getDay() == ordersList.get(i).getDateCreate().getDay() && dateBegin.getMonth() == ordersList.get(i).getDateCreate().getMonth()
-            && dateBegin.getYear() == ordersList.get(i).getDateCreate().getDay()){
-                totalBegin = total;
+            if (dateBegin.getDay() == ordersList.get(i).getDateCreate().getDay() && dateBegin.getMonth() == ordersList.get(i).getDateCreate().getMonth()
+                    && dateBegin.getYear() == ordersList.get(i).getDateCreate().getDay()) {
+                totalBegin = totalB;
             }
             totalEnd = total;
         }
 
-        ChartTotalResponse chartTotalResponsebegin = new ChartTotalResponse(dateBegin,totalBegin);
+        ChartTotalResponse chartTotalResponsebegin = new ChartTotalResponse(dateBegin, totalBegin);
         chartTotalResponseList.add(chartTotalResponsebegin);
 
-        ChartTotalResponse chartTotalResponseEnd = new ChartTotalResponse(dateEnd,totalEnd);
+        ChartTotalResponse chartTotalResponseEnd = new ChartTotalResponse(dateEnd, totalEnd);
         chartTotalResponseList.add(chartTotalResponseEnd);
 
         return chartTotalResponseList;
     }
-    public List<ChartOrdersResponse> findBydateBeginAnddateEndAll(Date dateBegin, Date dateEnd){
+
+    public List<ChartOrdersResponse> findBydateBeginAnddateEndAll(Date dateBegin, Date dateEnd) {
         List<ChartOrdersResponse> chartOrdersResponseList = new ArrayList<>();
         List<Orders> ordersList = ordersRepository.findBydateBeginAnddateEndAll(dateBegin, dateEnd);
         int quantityEnd = 0;
         int quantityBegin = 0;
         for (int i = 0; i < ordersList.size(); i++) {
-            if(dateBegin.getDay() == ordersList.get(i).getDateCreate().getDay() && dateBegin.getMonth() == ordersList.get(i).getDateCreate().getMonth()
-                    && dateBegin.getYear() == ordersList.get(i).getDateCreate().getDay()){
+            if (dateBegin.getDay() == ordersList.get(i).getDateCreate().getDay() && dateBegin.getMonth() == ordersList.get(i).getDateCreate().getMonth()
+                    && dateBegin.getYear() == ordersList.get(i).getDateCreate().getDay()) {
                 quantityBegin += 1;
             }
             quantityEnd += 1;
         }
 
-        ChartOrdersResponse chartOrdersResponsebe = new ChartOrdersResponse(dateBegin,quantityBegin);
+        ChartOrdersResponse chartOrdersResponsebe = new ChartOrdersResponse(dateBegin, quantityBegin);
         chartOrdersResponseList.add(chartOrdersResponsebe);
 
-        ChartOrdersResponse chartOrdersResponseen = new ChartOrdersResponse(dateEnd,quantityEnd);
+        ChartOrdersResponse chartOrdersResponseen = new ChartOrdersResponse(dateEnd, quantityEnd);
         chartOrdersResponseList.add(chartOrdersResponseen);
 
 
