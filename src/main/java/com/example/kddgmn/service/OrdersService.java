@@ -45,7 +45,7 @@ public class OrdersService {
         return ordersRepository.findAll();
     }
 
-    public Integer saveOrder(Orders orders, String name) {
+    public Integer saveOrder(Orders orders, String name,int thanhToanPaypal) {
         try {
             if (orders.getCustomer().getIdCustomer() == 0) {
                 Customer customer = new Customer();
@@ -61,9 +61,15 @@ public class OrdersService {
                 int idMax = customerService.findMaxId();
                 Customer customer1 = new Customer(idMax);
                 orders.setCustomer(customer1);
+                if(thanhToanPaypal == 1){
+                    orders.setStatus(new Status(3));
+                }
 
                 ordersRepository.save(orders);
             } else {
+                if(thanhToanPaypal == 1){
+                    orders.setStatus(new Status(3));
+                }
                 ordersRepository.save(orders);
             }
         } catch (Exception ex) {

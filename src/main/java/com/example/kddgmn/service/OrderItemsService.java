@@ -27,7 +27,7 @@ public class OrderItemsService {
         return orderItemsRepository.findAll();
     }
 
-    public Integer saveOrderItem(List<OrderItemProduct> orderItemProduct){
+    public Integer saveOrderItem(List<OrderItemProduct> orderItemProduct,int thanhToanPaypal){
         try{
             int idMaxOrders = ordersService.findMaxId();
             for (int i = 0; i < orderItemProduct.size(); i++) {
@@ -54,10 +54,11 @@ public class OrderItemsService {
 
                 orderItemsRepository.save(orderItems);
 
-//                System.out.println(prod);
-//                System.out.println(prod.getQuantity() - orderItemProduct.get(i).getQuantity());
-                prod.setQuantity(prod.getQuantity() - orderItemProduct.get(i).getQuantity());
-                productsService.save(prod);
+                // thanh toán online thì không trừ số lượng vì FE chưa check đc
+                if(thanhToanPaypal == 1){
+                    prod.setQuantity(prod.getQuantity() - orderItemProduct.get(i).getQuantity());
+                    productsService.save(prod);
+                }
 
             }
         }catch (Exception ex){

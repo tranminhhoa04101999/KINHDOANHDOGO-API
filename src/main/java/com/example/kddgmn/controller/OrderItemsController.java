@@ -19,8 +19,8 @@ public class OrderItemsController {
         return orderItemsService.getAll();
     }
     @PostMapping("/saveOrderItems")
-    public Integer saveOrderItems(@RequestBody List<OrderItemProduct> orderItemProduct){
-        return orderItemsService.saveOrderItem(orderItemProduct);
+    public Integer saveOrderItems(@RequestBody List<OrderItemProduct> orderItemProduct,@RequestParam("thanhToanPaypal") int thanhToanPaypal){
+        return orderItemsService.saveOrderItem(orderItemProduct,thanhToanPaypal);
     }
     @GetMapping("/orderItemsfindByIdOrders")
     public List<OrderItems> findByIdOrders(@RequestParam("idOrders") int idOrders){

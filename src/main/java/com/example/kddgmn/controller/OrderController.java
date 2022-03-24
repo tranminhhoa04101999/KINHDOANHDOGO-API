@@ -23,8 +23,8 @@ public class OrderController {
         return  ordersService.getAll();
     }
     @PostMapping("/saveOrder")
-    public Integer saveOrder(@RequestBody Orders orders,@RequestParam("name") String name){
-        return ordersService.saveOrder(orders,name);
+    public Integer saveOrder(@RequestBody Orders orders,@RequestParam("name") String name,@RequestParam("thanhToanPaypal") int thanhToanPaypal){
+        return ordersService.saveOrder(orders,name,thanhToanPaypal);
     }
     @GetMapping("/searchOrderByIdOrPhone")
     public List<SearchOrderResponse> searchOrderByIdOrPhone(@RequestParam("idStatus") int idStatus, @RequestParam("idOrders") int idOrders, @RequestParam("phone") String phone){

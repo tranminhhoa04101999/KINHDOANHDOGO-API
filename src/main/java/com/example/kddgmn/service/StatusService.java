@@ -15,6 +15,11 @@ public class StatusService {
     public List<Status> getAll(){
         return  statusRepository.getAllCustom();
     }
-
+    public List<Status> getThanhtoanroi(){
+        return  statusRepository.gettren3();
+    }
+    public List<Status> getLonhon (int idStatus){
+        return statusRepository.getlonhon(idStatus);
+    }
 
 }
