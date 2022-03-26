@@ -5,21 +5,21 @@ import com.example.kddgmn.payload.*;
 import com.example.kddgmn.repository.CustomerRepository;
 import com.example.kddgmn.repository.OrderItemsRepository;
 import com.example.kddgmn.repository.OrdersRepository;
+
+import org.apache.poi.util.Units;
+import org.apache.poi.xwpf.usermodel.*;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -42,7 +42,14 @@ public class OrdersService {
     private CustomerRepository customerRepository;
 
     public List<Orders> getAll() {
-        return ordersRepository.findAll();
+        List<Orders> ordersList = ordersRepository.findAll();
+        Collections.sort(ordersList, new Comparator<Orders>() {
+            @Override
+            public int compare(Orders o1, Orders o2) {
+                return o1.getIdOrder() > o2.getIdOrder() ? -1 : 0;
+            }
+        });
+        return ordersList;
     }
 
     public Integer saveOrder(Orders orders, String name,int thanhToanPaypal) {
@@ -142,7 +149,13 @@ public class OrdersService {
             searchOrderResponse.setOrders(ordersList.get(i));
 
             searchOrderResponses.add(searchOrderResponse);
-        }
+        };
+        Collections.sort(searchOrderResponses, new Comparator<SearchOrderResponse>() {
+            @Override
+            public int compare(SearchOrderResponse o1, SearchOrderResponse o2) {
+                return o1.getOrders().getDateCreate().getTime() > o2.getOrders().getDateCreate().getTime() ? -1 : 0;
+            }
+        });
 
         return searchOrderResponses;
     }
@@ -159,6 +172,10 @@ public class OrdersService {
                 orders.setStatus(status);
                 ordersRepository.save(orders);
             } else {
+                // đơn hàng được chuyển qua đang giao giao thì xuất file
+                if(idStatus == 4){
+                    xuatfilepdf(idOrders);
+                }
                 Date date = new Date();
                 Orders orders = ordersRepository.findById(idOrders).get();
                 orders.setDateModified(date);
@@ -167,6 +184,7 @@ public class OrdersService {
                 Status status = new Status(idStatus);
                 orders.setStatus(status);
                 ordersRepository.save(orders);
+
             }
             // khi xác nhận đơn hàng thì gửi mail thông báo
             if (idStatus == 2) {
@@ -366,4 +384,60 @@ public class OrdersService {
         return chartOrdersResponseList;
     }
 
+    public int xuatfilepdf (int idOrder){
+        Orders orders = ordersRepository.findById(idOrder).get();
+        List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(idOrder);
+        try{
+            XWPFDocument document = new XWPFDocument();
+            XWPFParagraph paragraph = document.createParagraph();
+            XWPFRun run = paragraph.createRun();
+            run.setText("Hóa Đơn");
+            run.setFontSize(26);
+            paragraph.setAlignment(ParagraphAlignment.CENTER);
+            //
+            XWPFParagraph P0 = document.createParagraph();
+            run = P0.createRun();
+            run.addBreak();
+            run.setText("Mã đơn hàng: "+orders.getIdOrder());
+            run.addBreak();
+            run.setText("Tên người nhận: "+orders.getCustomer().getName());
+            run.addBreak();
+            run.setText("SĐT: "+orders.getCustomer().getPhone());
+            run.addBreak();
+            run.setText("Địa chỉ: "+orders.getAddress());
+            run.addBreak();
+
+            XWPFParagraph P2 = document.createParagraph();
+            run = P2.createRun();
+            double total = 0.0;
+            for (int i = 0; i < orderItemsList.size(); i++) {
+                List<ImgProductResponse> imgProductList = imgProductService.getImgByIdProd(orderItemsList.get(i).getProduct().getIdProduct());
+
+                String link = "https://firebasestorage.googleapis.com/v0/b/image-kddgmn-52ebf.appspot.com/o/images%2F"+imgProductList.get(0).getImgURL()+".jpg?alt=media";
+                InputStream inputStream = new URL(link).openStream();
+                run.addPicture(inputStream, XWPFDocument.PICTURE_TYPE_JPEG, "hinh.jpg", Units.toEMU(70), Units.toEMU(70));
+                run.setText(orderItemsList.get(i).getProduct().getNameProduct());
+                run.addBreak();
+                run.setText("Giá: "+orderItemsList.get(i).getPriceCurrent() + "\t\t\tx" +orderItemsList.get(i).getQuantity());
+                run.addBreak();
+                run.addBreak();
+                total += orderItemsList.get(i).getPriceCurrent() * orderItemsList.get(i).getQuantity();
+            }
+            run.setText("Tổng tiền: " + total);
+            if(orders.getStatus().getIdStatus() == 3){
+                run.addBreak();
+                run.setText("Đơn hàng này đã được thanh toán");
+            }
+
+            FileOutputStream out = new FileOutputStream(new File("C:\\Users\\ASUS\\Desktop\\hoadon"+orders.getIdOrder()+".docx"));
+            document.write(out);
+            out.close();
+            document.close();
+
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return 0;
+        }
+        return 1;
+    }
 }

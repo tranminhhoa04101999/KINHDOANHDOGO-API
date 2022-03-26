@@ -64,6 +64,10 @@ public class OrderController {
     @GetMapping("/getDataThongkeOrder")
     public List<ChartOrdersResponse> findBydateBeginAnddateEndAll(@RequestParam("begin") Date begin, @RequestParam("end") Date end){
         return  ordersService.findBydateBeginAnddateEndAll(begin, end);
+    }
 
+    @GetMapping("/xuatfilepdf")
+    public int xuatfilepdf (@RequestParam("idOrder") int idOrder){
+        return ordersService.xuatfilepdf(idOrder);
     }
 }
