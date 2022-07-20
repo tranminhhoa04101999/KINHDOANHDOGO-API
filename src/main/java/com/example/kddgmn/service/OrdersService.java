@@ -429,7 +429,7 @@ public class OrdersService {
                 run.setText("Đơn hàng này đã được thanh toán");
             }
 
-            FileOutputStream out = new FileOutputStream(new File("C:\\Users\\ASUS\\Desktop\\hoadon"+orders.getIdOrder()+".docx"));
+            FileOutputStream out = new FileOutputStream(new File("C:\\Users\\ADMIN\\Desktop\\hoadon"+orders.getIdOrder()+".docx"));
             document.write(out);
             out.close();
             document.close();

@@ -15,6 +15,8 @@ public class OrderItems {
     @Column(name= "pricecurrent")
     private Double priceCurrent;
 
+    @Column(name = "discountcurrent")
+    private Double discountcurrent;
 
     public OrderItems() {
     }
@@ -65,5 +67,13 @@ public class OrderItems {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Double getDiscountcurrent() {
+        return discountcurrent;
+    }
+
+    public void setDiscountcurrent(Double discountcurrent) {
+        this.discountcurrent = discountcurrent;
     }
 }
