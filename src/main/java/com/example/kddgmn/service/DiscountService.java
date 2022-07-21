@@ -61,7 +61,7 @@ public class DiscountService {
             List<ImgProductResponse> imgProductResponses = imgProductService.getImgByIdProd(products.get(i).getIdProduct());
 
             ProductSearchResponse productSearchResponse = new ProductSearchResponse(
-                    products.get(i).getIdProduct(),products.get(i).getNameProduct(),products.get(i).getPrice(),products.get(i).getColor()
+                    products.get(i).getIdProduct(),products.get(i).getNameProduct(),products.get(i).getPrice(),0.0,products.get(i).getColor()
                     ,products.get(i).getQuantity(),imgProductResponses.get(0).getImgURL()
             );
             productSearchResponses.add(productSearchResponse);

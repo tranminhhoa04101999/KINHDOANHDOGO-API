@@ -28,10 +28,17 @@ public class ImportProduct {
     private Date dateModified;
 
     @ManyToOne
-    @JoinColumn(name = "idEmployee")
+    @JoinColumn(name = "idemployee")
     private Employee employee;
 
     public ImportProduct() {
+    }
+
+    public ImportProduct(String sourceName, Date dateCreate, Date dateModified, Employee employee) {
+        this.sourceName = sourceName;
+        this.dateCreate = dateCreate;
+        this.dateModified = dateModified;
+        this.employee = employee;
     }
 
     public ImportProduct(Integer idImportProduct, String sourceName, Date dateCreate, Date dateModified, Employee employee) {

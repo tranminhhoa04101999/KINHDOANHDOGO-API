@@ -6,6 +6,7 @@ public class ProductSearchResponse {
     private Integer idProduct;
     private String nameProduct;
     private Double price;
+    private Double discountCurrent;
     private String color;
     private Integer quantity;
     private String imgURL;
@@ -13,10 +14,11 @@ public class ProductSearchResponse {
     public ProductSearchResponse() {
     }
 
-    public ProductSearchResponse(Integer idProduct, String nameProduct, Double price, String color, Integer quantity, String imgURL) {
+    public ProductSearchResponse(Integer idProduct, String nameProduct, Double price, Double discountCurrent, String color, Integer quantity, String imgURL) {
         this.idProduct = idProduct;
         this.nameProduct = nameProduct;
         this.price = price;
+        this.discountCurrent = discountCurrent;
         this.color = color;
         this.quantity = quantity;
         this.imgURL = imgURL;
@@ -44,6 +46,14 @@ public class ProductSearchResponse {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Double getDiscountCurrent() {
+        return discountCurrent;
+    }
+
+    public void setDiscountCurrent(Double discountCurrent) {
+        this.discountCurrent = discountCurrent;
     }
 
     public String getColor() {

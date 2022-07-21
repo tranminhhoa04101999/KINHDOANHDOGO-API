@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Table(name = "importdetails")
 public class ImportDetails {
     @EmbeddedId
-    private ImportProductId importProductId;
+    private ImportDetailsId importProductId;
 
     private Double price;
     private Integer quantity;
@@ -23,12 +23,11 @@ public class ImportDetails {
     public ImportDetails() {
     }
 
-
-    public ImportProductId getImportProductId() {
+    public ImportDetailsId getImportProductId() {
         return importProductId;
     }
 
-    public void setImportProductId(ImportProductId importProductId) {
+    public void setImportProductId(ImportDetailsId importProductId) {
         this.importProductId = importProductId;
     }
 

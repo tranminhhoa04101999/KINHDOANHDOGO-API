@@ -7,17 +7,17 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class ImportProductId implements Serializable {
+public class ImportDetailsId implements Serializable {
     @Column(name = "idimportproduct")
     private Integer idImportProduct;
 
     @Column(name = "idproduct")
     private Integer idProduct;
 
-    public ImportProductId() {
+    public ImportDetailsId() {
     }
 
-    public ImportProductId(Integer idImportProduct, Integer idProduct) {
+    public ImportDetailsId(Integer idImportProduct, Integer idProduct) {
         this.idImportProduct = idImportProduct;
         this.idProduct = idProduct;
     }
@@ -42,7 +42,7 @@ public class ImportProductId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ImportProductId that = (ImportProductId) o;
+        ImportDetailsId that = (ImportDetailsId) o;
         return Objects.equals(idImportProduct, that.idImportProduct) && Objects.equals(idProduct, that.idProduct);
     }
 }

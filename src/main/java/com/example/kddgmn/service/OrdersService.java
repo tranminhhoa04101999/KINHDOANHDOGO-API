@@ -109,7 +109,7 @@ public class OrdersService {
                     imgProd = imgProductResponses.get(0).getImgURL();
                 }
                 ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(), orderitems.get(j).getPriceCurrent()
-                        , product.getColor(), orderitems.get(j).getQuantity(), imgProd);
+                        ,orderitems.get(j).getDiscountcurrent(), product.getColor(), orderitems.get(j).getQuantity(), imgProd);
                 productSearchResponses.add(productSearchResponse);
             }
 
@@ -141,7 +141,7 @@ public class OrdersService {
                 Product product = orderitems.get(j).getProduct();
                 List<ImgProductResponse> imgProductResponses = imgProductService.getImgByIdProd(product.getIdProduct());
                 ProductSearchResponse productSearchResponse = new ProductSearchResponse(product.getIdProduct(), product.getNameProduct(), orderitems.get(j).getPriceCurrent()
-                        , product.getColor(), orderitems.get(j).getQuantity(), imgProductResponses.get(0).getImgURL());
+                        ,orderitems.get(j).getDiscountcurrent(), product.getColor(), orderitems.get(j).getQuantity(), imgProductResponses.get(0).getImgURL());
                 productSearchResponses.add(productSearchResponse);
             }
 
