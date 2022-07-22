@@ -29,7 +29,7 @@ public interface OrdersRepository extends JpaRepository<Orders,Integer> {
     @Query("SELECT v FROM Orders v WHERE v.dateCreate >= :date")
     List<Orders> findByDateCreateLonHon(@Param("date") Date date);
 
-    @Query("SELECT v FROM Orders v WHERE year(v.dateCreate) = year(:date) AND v.status.idStatus != 6")
+    @Query("SELECT v FROM Orders v WHERE year(v.dateCreate) = year(:date) AND v.status.idStatus = 5")
     List<Orders> findByYearCreate(@Param("date") Date date);
 
     @Query("SELECT v.idOrders FROM Orders v WHERE v.customer.idCustomer= :idCustomer AND v.status.idStatus = 5")

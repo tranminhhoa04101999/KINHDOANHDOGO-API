@@ -6,6 +6,7 @@ import com.example.kddgmn.repository.CustomerRepository;
 import com.example.kddgmn.repository.OrderItemsRepository;
 import com.example.kddgmn.repository.OrdersRepository;
 
+import com.example.kddgmn.repository.ProductRepository;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
 import org.hibernate.criterion.Order;
@@ -20,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -40,6 +42,12 @@ public class OrdersService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private ImportDetailsService importDetailsService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<Orders> getAll() {
         List<Orders> ordersList = ordersRepository.findAll();
@@ -283,46 +291,36 @@ public class OrdersService {
         for (int i = 0; i < ChartTotalResponses.size(); i++) {
             ChartTotalResponse chartTotalResponse = new ChartTotalResponse();
             Double total = 0.0;
+            Double totalSale = 0.0;
 
             for (int j = 0; j < ordersList.size(); j++) {
                 if (ChartTotalResponses.get(i).getDate().getMonth() == ordersList.get(j).getDateCreate().getMonth()) {
                     List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(j).getIdOrder());
                     for (int k = 0; k < orderItemsList.size(); k++) {
                         total += orderItemsList.get(k).getPriceCurrent() * orderItemsList.get(k).getQuantity();
+                        var avg = averagePrice(orderItemsList.get(k).getProduct().getIdProduct());
+                        totalSale += (avg*orderItemsList.get(k).getQuantity());
                     }
                 }
             }
-            chartTotalResponse.setTotal(total);
+            chartTotalResponse.setTotal(total-totalSale);
             chartTotalResponse.setDate(ChartTotalResponses.get(i).getDate());
             ChartTotalResponses.set(i, chartTotalResponse);
 
         }
 
-//        for (int i = 0; i < ordersList.size(); i++) {
-//            ChartTotalResponse chartTotalResponse = new ChartTotalResponse();
-//
-//            for (int j = 0; j < ChartTotalResponses.size(); j++) {
-//                    if(ChartTotalResponses.get(j).getDate().getMonth() == ordersList.get(i).getDateCreate().getMonth()){
-//                        List<OrderItems> orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
-//
-//                        for (int k = 0; k < orderItemsList.size(); k++) {
-//                            total += orderItemsList.get(k).getPriceCurrent() * orderItemsList.get(k).getQuantity();
-//                        }
-//
-//                        chartTotalResponse.setTotal(total);
-//                        chartTotalResponse.setDate(ChartTotalResponses.get(j).getDate());
-//                        ChartTotalResponses.set(j,chartTotalResponse);
-//
-//                    }
-//
-//            }
-//            total =0.0;
-//        }
         return ChartTotalResponses;
     }
 
     public int huyOrder(int idOrder) {
         try {
+            var listOrderItems = orderItemsRepository.findByIdOrders(idOrder);
+            for (var item: listOrderItems
+                 ) {
+                var prod = productRepository.findById(item.getProduct().getIdProduct()).get();
+                prod.setQuantity(item.getQuantity()+prod.getQuantity());
+                productRepository.save(prod);
+            }
             ordersRepository.UpdateStatusByidStatusAndId(6, idOrder);
         } catch (Exception ex) {
             return 0;
@@ -359,6 +357,75 @@ public class OrdersService {
         chartTotalResponseList.add(chartTotalResponseEnd);
 
         return chartTotalResponseList;
+    }
+    private Double averagePrice(int idProd){
+        var listImportProd = importDetailsService.findByIdProduct(idProd);
+        var totalPrice = 0.0;
+        var totalQuantity = 0;
+        for (var item: listImportProd) {
+            totalPrice += item.getQuantity()*item.getPrice();
+            totalQuantity += item.getQuantity();
+        }
+        double averagePrice = totalPrice/totalQuantity;
+        double output = Math.round(averagePrice * 100.0) /100.0;
+        return output;
+    }
+    public AllStatusOrder getAllStatusOrder (Date dateBegin, Date dateEnd){
+        var allStatusOrder = new AllStatusOrder();
+        var ordersList = ordersRepository.findBydateBeginAnddateEndAll(dateBegin, dateEnd);
+        var tongDon =0;
+        var daGiao = 0;
+        var daHuy = 0;
+        for (var item :
+                ordersList) {
+            if(item.getStatus().getIdStatus() == 5){
+                daGiao++;
+            }else if(item.getStatus().getIdStatus() == 6){
+                daHuy++;
+            }
+            tongDon++;
+        }
+        allStatusOrder.setTongDon(tongDon);
+        allStatusOrder.setDaGiao(daGiao);
+        allStatusOrder.setDaHuy(daHuy);
+        return allStatusOrder;
+    }
+
+    public List<IncomeStatistical> incomeFindBydateBeginAnddateEnd (Date dateBegin, Date dateEnd){
+        var incomeStatisticalList = new ArrayList<IncomeStatistical>();
+        var ordersList = ordersRepository.findBydateBeginAnddateEnd(dateBegin, dateEnd);
+
+        for (int i = 0; i < ordersList.size(); i++) {
+            var orderItemsList = orderItemsRepository.findByIdOrders(ordersList.get(i).getIdOrder());
+            for (int j = 0; j < orderItemsList.size(); j++) {
+                var item = orderItemsList.get(j);
+                int checkExist = 0;
+                int index = -1;
+                for (int k = 0; k < incomeStatisticalList.size(); k++) {
+                    // nếu tồn tại trong list rồi thì thêm số lượng
+                    if(incomeStatisticalList.get(k).getId() == item.getProduct().getIdProduct()){
+                        checkExist = 1;
+                        index = k;
+                    }
+                }
+                if(checkExist == 0){
+                    var incomeStatistical = new IncomeStatistical();
+                    incomeStatistical.setId(item.getProduct().getIdProduct());
+                    incomeStatistical.setName(item.getProduct().getNameProduct());
+                    incomeStatistical.setAverageImportPrice(averagePrice(item.getProduct().getIdProduct()));
+                    incomeStatistical.setTotalPriceSale(item.getPriceCurrent()*item.getQuantity());
+                    incomeStatistical.setQuantitySale(item.getQuantity());
+                    incomeStatisticalList.add(incomeStatistical);
+                }else {
+                    int quantityOld = incomeStatisticalList.get(index).getQuantitySale();
+                    incomeStatisticalList.get(index).setQuantitySale(quantityOld+item.getQuantity());
+                    double totalPriceOld = incomeStatisticalList.get(index).getTotalPriceSale();
+                    incomeStatisticalList.get(index).setTotalPriceSale(totalPriceOld+ (item.getQuantity()*item.getPriceCurrent()));
+                }
+            }
+        }
+
+        return incomeStatisticalList;
     }
 
     public List<ChartOrdersResponse> findBydateBeginAnddateEndAll(Date dateBegin, Date dateEnd) {
@@ -440,4 +507,5 @@ public class OrdersService {
         }
         return 1;
     }
+
 }

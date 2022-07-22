@@ -1,10 +1,7 @@
 package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.Orders;
-import com.example.kddgmn.payload.ChartOrdersResponse;
-import com.example.kddgmn.payload.ChartTotalResponse;
-import com.example.kddgmn.payload.SearchOrderResponse;
-import com.example.kddgmn.payload.ThongKeTotalResponse;
+import com.example.kddgmn.payload.*;
 import com.example.kddgmn.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -69,5 +66,15 @@ public class OrderController {
     @GetMapping("/xuatfilepdf")
     public int xuatfilepdf (@RequestParam("idOrder") int idOrder){
         return ordersService.xuatfilepdf(idOrder);
+    }
+
+    @GetMapping("/incomeFindBydateBeginAnddateEnd")
+    public List<IncomeStatistical> incomeFindBydateBeginAnddateEnd (@RequestParam("begin") Date begin, @RequestParam("end") Date end){
+        return ordersService.incomeFindBydateBeginAnddateEnd(begin, end);
+    }
+
+    @GetMapping("/getAllStatusOrder")
+    public AllStatusOrder getAllStatusOrder(@RequestParam("begin") Date begin, @RequestParam("end") Date end){
+        return ordersService.getAllStatusOrder(begin, end);
     }
 }

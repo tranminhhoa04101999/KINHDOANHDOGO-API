@@ -33,7 +33,8 @@ public class OrderItemsService {
             for (int i = 0; i < orderItemProduct.size(); i++) {
                 OrderItems orderItems = new OrderItems();
                 Orders orders = new Orders(idMaxOrders);
-                Product product = new Product(orderItemProduct.get(i).getIdProduct());
+                Product product = productsService.getProductwithid(orderItemProduct.get(i).getIdProduct());
+
                 OrderItemsId orderItemsId = new OrderItemsId();
                 orderItemsId.setIdOrders(idMaxOrders);
                 orderItemsId.setIdProduct(orderItemProduct.get(i).getIdProduct());
@@ -41,7 +42,12 @@ public class OrderItemsService {
                 orderItems.setOrders(orders);
                 orderItems.setProduct(product);
                 orderItems.setQuantity(orderItemProduct.get(i).getQuantity());
-
+                // lấy giảm giá hiện tại trên sản phẩm
+                Double discountCur = 0.0;
+                if(product.getDiscount() != null){
+                    discountCur = product.getDiscount().getPercent();
+                }
+                orderItems.setDiscountcurrent(discountCur);
                 // lấy product ra trừ số lượng khi thêm thành công~
                 Product prod = productsService.getProductwithid(orderItemProduct.get(i).getIdProduct());
                 Double price = prod.getPrice();
@@ -55,10 +61,8 @@ public class OrderItemsService {
                 orderItemsRepository.save(orderItems);
 
                 // thanh toán online thì không trừ số lượng vì FE chưa check đc
-                if(thanhToanPaypal == 1){
-                    prod.setQuantity(prod.getQuantity() - orderItemProduct.get(i).getQuantity());
-                    productsService.save(prod);
-                }
+                prod.setQuantity(prod.getQuantity() - orderItemProduct.get(i).getQuantity());
+                productsService.save(prod);
 
             }
         }catch (Exception ex){

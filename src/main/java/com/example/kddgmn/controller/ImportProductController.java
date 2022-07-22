@@ -26,6 +26,14 @@ public class ImportProductController {
     public CommonResponse addImport(@RequestParam("idEmployee") int idEmployee, @RequestBody ImportProductRecive importProductRecive){
         return importProductService.addImport(idEmployee,importProductRecive);
     }
+    @GetMapping("/importproductfindbyid")
+    public ImportProduct findById(@RequestParam("id") int id){
+        return importProductService.findById(id);
+    }
+    @GetMapping("/exportreceiptimport")
+    public int exportreceiptimport(@RequestParam("idImportProduct") int id){
+        return importProductService.exportReceiptWordFile(id);
+    }
 }
 
 
