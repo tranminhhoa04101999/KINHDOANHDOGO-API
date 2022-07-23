@@ -34,6 +34,10 @@ public class ImportProductController {
     public int exportreceiptimport(@RequestParam("idImportProduct") int id){
         return importProductService.exportReceiptWordFile(id);
     }
+    @PostMapping("/editImport")
+    public CommonResponse editImport(@RequestParam("idImportProduct") int idImportProduct, @RequestBody ImportProductRecive importProductRecive){
+        return importProductService.editImport(idImportProduct, importProductRecive);
+    }
 }
 
 

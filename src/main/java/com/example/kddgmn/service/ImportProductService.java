@@ -34,28 +34,30 @@ public class ImportProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<ImportProduct> getAll(){
+    public List<ImportProduct> getAll() {
         return importProductRepository.findAll();
     }
-    public int save(ImportProduct importProduct){
+
+    public int save(ImportProduct importProduct) {
         try {
             importProductRepository.save(importProduct);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0;
         }
         return 1;
     }
-    public CommonResponse addImport(int idEmployee,ImportProductRecive importProductRecive){
+
+    public CommonResponse addImport(int idEmployee, ImportProductRecive importProductRecive) {
         CommonResponse commonResponse = new CommonResponse();
         Employee employee = employeeService.findByIdAccount(idEmployee).get(0);
-        ImportProduct importProduct = new ImportProduct(importProductRecive.getSourceName(),new Date(),new Date(),employee);
+        ImportProduct importProduct = new ImportProduct(importProductRecive.getSourceName(), new Date(), new Date(), employee);
         List<ListProductImportRecive> listProductImportRecive = importProductRecive.getListProd();
 
         try {
             save(importProduct);
             int idMax = importProductRepository.findIdMax();
             listProductImportRecive.stream().forEach(item -> {
-                ImportDetailsId importDetailsId = new ImportDetailsId(idMax,item.getId());
+                ImportDetailsId importDetailsId = new ImportDetailsId(idMax, item.getId());
                 ImportDetails importDetails = new ImportDetails();
                 importDetails.setImportProductId(importDetailsId);
                 importDetails.setImportProduct(importProduct);
@@ -72,8 +74,7 @@ public class ImportProductService {
 
             commonResponse.setIdResult(1);
             commonResponse.setMessage("Nhập hàng thành công !!!");
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error" + ex.getMessage());
             commonResponse.setIdResult(0);
             commonResponse.setMessage("Nhập hàng thất bại !!!");
@@ -81,11 +82,11 @@ public class ImportProductService {
         return commonResponse;
     }
 
-    public ImportProduct findById(int id){
+    public ImportProduct findById(int id) {
         return importProductRepository.findById(id).get();
     }
 
-    public int exportReceiptWordFile (int idImportProduct){
+    public int exportReceiptWordFile(int idImportProduct) {
         ImportProduct importProduct = importProductRepository.findById(idImportProduct).get();
         List<ImportDetails> importDetailsList = importDetailsRepository.findByIdImportProduct(idImportProduct);
 
@@ -102,19 +103,19 @@ public class ImportProductService {
             run = P0.createRun();
             run.setFontSize(13);
             P0.setAlignment(ParagraphAlignment.CENTER);
-            run.setText("Ngày Nhập: "+importProduct.getDateCreate());
+            run.setText("Ngày Nhập: " + importProduct.getDateCreate());
 
             XWPFParagraph P1 = document.createParagraph();
             run = P1.createRun();
             run.setFontSize(13);
             P1.setAlignment(ParagraphAlignment.CENTER);
-            run.setText("Mã số: "+importProduct.getIdImportProduct());
+            run.setText("Mã số: " + importProduct.getIdImportProduct());
 
             XWPFParagraph P2 = document.createParagraph();
             run.addBreak();
             run = P2.createRun();
             run.setFontSize(13);
-            run.setText("Tên nguồn nhập: "+importProduct.getSourceName());
+            run.setText("Tên nguồn nhập: " + importProduct.getSourceName());
 
             //create table
             XWPFTable table = document.createTable();
@@ -143,26 +144,26 @@ public class ImportProductService {
             for (int i = 0; i < importDetailsList.size(); i++) {
                 //create second row
                 XWPFTableRow tableRowTwo = table.createRow();
-                tableRowTwo.getCell(0).setText(i+1+"");
-                tableRowTwo.getCell(1).setText("  " +importDetailsList.get(i).getProduct().getNameProduct()+"  ");
-                tableRowTwo.getCell(2).setText("  " +importDetailsList.get(i).getProduct().getIdProduct() +" ");
-                tableRowTwo.getCell(3).setText("  " + importDetailsList.get(i).getQuantity()+ "  " );
-                tableRowTwo.getCell(4).setText("  " + currencyFormatter.format(importDetailsList.get(i).getPrice()) +"  " );
+                tableRowTwo.getCell(0).setText(i + 1 + "");
+                tableRowTwo.getCell(1).setText("  " + importDetailsList.get(i).getProduct().getNameProduct() + "  ");
+                tableRowTwo.getCell(2).setText("  " + importDetailsList.get(i).getProduct().getIdProduct() + " ");
+                tableRowTwo.getCell(3).setText("  " + importDetailsList.get(i).getQuantity() + "  ");
+                tableRowTwo.getCell(4).setText("  " + currencyFormatter.format(importDetailsList.get(i).getPrice()) + "  ");
                 Double total = importDetailsList.get(i).getQuantity() * importDetailsList.get(i).getPrice();
-                tableRowTwo.getCell(5).setText("  "+ currencyFormatter.format(total)+"  " );
+                tableRowTwo.getCell(5).setText("  " + currencyFormatter.format(total) + "  ");
                 totalAll += total;
             }
             XWPFParagraph P4 = document.createParagraph();
             run = P4.createRun();
             run.setFontSize(13);
-            run.setText("Tổng tiền: "+ currencyFormatter.format(totalAll));
+            run.setText("Tổng tiền: " + currencyFormatter.format(totalAll));
 
             XWPFParagraph P5 = document.createParagraph();
             run = P5.createRun();
             run.addBreak();
             run.setFontSize(14);
             run.setBold(true);
-            run.setText("Người lập phiếu" );
+            run.setText("Người lập phiếu");
 
             XWPFParagraph P6 = document.createParagraph();
             run = P6.createRun();
@@ -178,15 +179,74 @@ public class ImportProductService {
             run.setFontFamily("Segoe Script");
             run.setText(importProduct.getEmployee().getName());
 
-            FileOutputStream out = new FileOutputStream(new File("C:\\Users\\ADMIN\\Desktop\\Import"+importProduct.getIdImportProduct()+".docx"));
+            FileOutputStream out = new FileOutputStream(new File("C:\\Users\\ADMIN\\Desktop\\Import" + importProduct.getIdImportProduct() + ".docx"));
             document.write(out);
             out.close();
             document.close();
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error" + ex.getMessage());
             return 0;
         }
         return 1;
+    }
+
+    public CommonResponse editImport(int idImportProd, ImportProductRecive importProductRecive) {
+        try {
+            var listProduct = importProductRecive.getListProd();
+            for (int i = 0; i < listProduct.size(); i++) {
+                ImportDetailsId importDetailsId = new ImportDetailsId(idImportProd, listProduct.get(i).getId());
+                var quantityNew = importProductRecive.getListProd().get(i).getQuantity();
+                var product = productRepository.findById(listProduct.get(i).getId()).get();
+                var priceNew = importProductRecive.getListProd().get(i).getPrice();
+                ImportDetails importDetails = new ImportDetails();
+
+                if (importDetailsRepository.findById(importDetailsId).isEmpty()) {
+                    importDetails.setImportProductId(importDetailsId);
+                    var importProduct = importProductRepository.findById(idImportProd).get();
+                    importDetails.setImportProduct(importProduct);
+                    importDetails.setProduct(product);
+                    importDetails.setQuantity(quantityNew);
+                    importDetails.setPrice(priceNew);
+                    product.setQuantity(product.getQuantity() + quantityNew);
+                } else {
+                    importDetails = importDetailsRepository.findById(importDetailsId).get();
+                    var quantityOld = importDetails.getQuantity();
+                    importDetails.setQuantity(quantityNew);
+                    importDetails.setPrice(priceNew);
+                    product.setQuantity(product.getQuantity() + (quantityNew - quantityOld));
+                }
+                productRepository.save(product);
+                importDetailsRepository.save(importDetails);
+            }
+            // nếu xóa bỏ sản phẩm thêm từ lần trước
+            var importDetailAll = importDetailsRepository.findByIdImportProduct(idImportProd);
+
+            for (int i = 0; i < importDetailAll.size(); i++) {
+                int exist = 0;
+                for (int j = 0; j < importProductRecive.getListProd().size(); j++) {
+                    if (importDetailAll.get(i).getProduct().getIdProduct() == importProductRecive.getListProd().get(j).getId()) {
+                        exist = 1;
+                    }
+                }
+                if (exist == 0) {
+                    var product = importDetailAll.get(i).getProduct();
+                    product.setQuantity(product.getQuantity() - importDetailAll.get(i).getQuantity());
+                    productRepository.save(product);
+                    var importDetails = importDetailsRepository.findById(importDetailAll.get(i).getImportProductId()).get();
+                    importDetailsRepository.delete(importDetails);
+                }
+            }
+
+
+            var importProduct = importProductRepository.findById(idImportProd).get();
+            importProduct.setSourceName(importProductRecive.getSourceName());
+            importProduct.setDateModified(new Date());
+            importProductRepository.save(importProduct);
+        } catch (Exception ex) {
+            System.out.println("errr" + ex.getMessage());
+            return new CommonResponse(0, "Thất bại chỗ editImport");
+        }
+
+        return new CommonResponse(1, "thanhcong");
     }
 }

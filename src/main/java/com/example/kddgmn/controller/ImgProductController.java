@@ -1,8 +1,10 @@
 package com.example.kddgmn.controller;
 
 import com.example.kddgmn.model.ImgProduct;
+import com.example.kddgmn.payload.CommonResponse;
 import com.example.kddgmn.payload.ImgProductResponse;
 import com.example.kddgmn.payload.ImgWithIdProdResponse;
+import com.example.kddgmn.payload.ImportProductRecive;
 import com.example.kddgmn.service.ImgProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +46,6 @@ public class ImgProductController {
     public Integer deleteImgByIdProduct(@RequestParam("idProduct") Integer idProduct){
         return imgProductService.deleteByIdProduct(idProduct);
     }
+
 
 }

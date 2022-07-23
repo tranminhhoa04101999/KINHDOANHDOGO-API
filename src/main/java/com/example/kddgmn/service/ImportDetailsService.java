@@ -32,4 +32,14 @@ public class ImportDetailsService {
     public List<ImportDetails> findByIdProduct(int idProduct){
         return importDetailsRepository.findByIdProduct(idProduct);
     }
+    public int totalProductImportByIdProduct(int id){
+        var listProd = importDetailsRepository.findByIdProduct(id);
+        int output = 0;
+        for (var item :
+                listProd) {
+            output += item.getQuantity();
+        }
+
+        return output;
+    }
 }

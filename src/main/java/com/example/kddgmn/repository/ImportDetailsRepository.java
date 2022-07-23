@@ -14,4 +14,6 @@ public interface ImportDetailsRepository extends JpaRepository<ImportDetails, Im
 
     @Query("select v from ImportDetails v where v.product.idProduct= :idProduct")
     List<ImportDetails> findByIdProduct(@Param("idProduct") int idProduct);
+
+
 }

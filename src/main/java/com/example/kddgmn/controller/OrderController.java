@@ -4,8 +4,14 @@ import com.example.kddgmn.model.Orders;
 import com.example.kddgmn.payload.*;
 import com.example.kddgmn.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
+import java.io.File;
+import java.net.http.HttpResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -76,5 +82,14 @@ public class OrderController {
     @GetMapping("/getAllStatusOrder")
     public AllStatusOrder getAllStatusOrder(@RequestParam("begin") Date begin, @RequestParam("end") Date end){
         return ordersService.getAllStatusOrder(begin, end);
+    }
+
+    @GetMapping("/statisticalTotalExportFileExcel")
+    public ResponseEntity<byte[]> exportStatisticalTotalExcel(@RequestParam("begin") Date begin, @RequestParam("end") Date end){
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Thongke.xlsx\"")
+                .body(ordersService.exportStatisticalTotalExcel(begin,end));
+
     }
 }
